@@ -1,4 +1,5 @@
 ﻿using FreeShareAPI.Models;
+using FreeShareAPI.Models.Dbmodel;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Http;
@@ -11,39 +12,39 @@ namespace FreeShareAPI.Controllers
 
         [HttpGet]
         [Route("GetAllProductDetails")]
-        public List<Product> GetAllProduct()
+        public IHttpActionResult GetAllProduct()
         {
             using (FreeShareEntities obj = new FreeShareEntities())
             {
                 List<Product> product = new List<Product>();
                 product = obj.Products.ToList();
-                return product;
+                return Ok(product);
             }
         }
 
         [HttpPost]
         [Route("InsertProductDetails")]
-        public bool InsertProduct(string productName)
+        public IHttpActionResult InsertProduct([FromBody] ProductModel productModel )
         {
             bool result = false;
-            if (!string.IsNullOrEmpty(productName))
+            if (!string.IsNullOrEmpty(productModel.ProductName))
             //if(product!=null)
             {
                 using (FreeShareEntities obj = new FreeShareEntities())
                 {
                     Product productobj = new Product();
-                    productobj.ProductName = productName;
+                    productobj.ProductName = productModel.ProductName;
                     obj.Products.Add(productobj);
                     obj.SaveChanges();
                     result = true;
                 }
             }
-            return result;
+            return Ok(result);
         }
 
         [HttpDelete]
-        [Route("DeleteProduct")]
-        public bool DeleteProduct(int id)
+        [Route("DeleteProduct/{id}")]
+        public IHttpActionResult DeleteProduct(int id)
         {
             bool result = false;
             if (id != 0)
@@ -59,28 +60,41 @@ namespace FreeShareAPI.Controllers
                     }
                 }
             }
-            return result;
+            return Ok(result);
+        }
+
+        [HttpGet]
+        [Route("GetProductById/{id}")]
+        public IHttpActionResult GetProductById(int id)
+        {
+            using (FreeShareEntities obj = new FreeShareEntities())
+            {
+                Product product = new Product();
+                product = obj.Products.FirstOrDefault(x => x.ProductId == id);
+                return Ok(product);
+            }
         }
 
         [HttpPut]
         [Route("UpdateProductDetails")]
-        public bool UpdateProduct(int id, string productName)
+        public IHttpActionResult UpdateProduct([FromBody] ProductModel productModel)
         {
             bool result = false;
-            if (id != 0 && !string.IsNullOrEmpty(productName))
+            if ( productModel.ProductId!= 0 && !string.IsNullOrEmpty(productModel.ProductName))
             {
                 using (FreeShareEntities obj = new FreeShareEntities())
                 {
-                    Product product = obj.Products.FirstOrDefault(x => x.ProductId == id);
+                    Product product = obj.Products.FirstOrDefault(x => x.ProductId == productModel.ProductId);
                     if (product != null)
                     {
-                        product.ProductName = productName;
+                        product.ProductName = productModel.ProductName;
+                        product.Deleted = productModel.Deleted;
                         obj.SaveChanges();
                         result = true;
                     }
                 }
             }
-            return result;
+            return Ok(result);
         }
     }
 }
