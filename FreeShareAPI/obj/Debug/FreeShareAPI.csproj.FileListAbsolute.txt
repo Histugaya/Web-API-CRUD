@@ -12,6 +12,7 @@ C:\Users\user\Documents\Visual Studio 2015\Projects\FreeShareAPI\FreeShareAPI\bi
 C:\Users\user\Documents\Visual Studio 2015\Projects\FreeShareAPI\FreeShareAPI\bin\roslyn\VBCSCompiler.exe
 C:\Users\user\Documents\Visual Studio 2015\Projects\FreeShareAPI\FreeShareAPI\bin\roslyn\VBCSCompiler.exe.config
 C:\Users\user\Documents\Visual Studio 2015\Projects\FreeShareAPI\FreeShareAPI\bin\FreeShareAPI.dll.config
+C:\Users\user\Documents\Visual Studio 2015\Projects\FreeShareAPI\FreeShareAPI\bin\FreeShareAPI.XML
 C:\Users\user\Documents\Visual Studio 2015\Projects\FreeShareAPI\FreeShareAPI\bin\FreeShareAPI.dll
 C:\Users\user\Documents\Visual Studio 2015\Projects\FreeShareAPI\FreeShareAPI\bin\FreeShareAPI.pdb
 C:\Users\user\Documents\Visual Studio 2015\Projects\FreeShareAPI\FreeShareAPI\bin\Antlr3.Runtime.dll

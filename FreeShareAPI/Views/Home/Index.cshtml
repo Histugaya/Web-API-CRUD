@@ -21,4 +21,27 @@
         <p>You can easily find a web hosting company that offers the right mix of features and price for your applications.</p>
         <p><a class="btn btn-default" href="http://go.microsoft.com/fwlink/?LinkId=301872">Learn more &raquo;</a></p>
     </div>
+    <input type="file" value="upload" id="upload"/>
 </div>
+@section scripts{ 
+<script>
+    $('#upload').change(function (e) {
+        var fileName = e.target.files[0].name;
+        file = e.target.files[0];
+        var formData = new FormData();
+        formData.append("file", file);
+            $.ajax({
+                type: 'POST',
+                url: '/api/product/UploadImage',
+                data: formData,
+                contentType: false,
+                processData: false,
+                success: function (result) {
+                },
+                error: function (result) {
+                    alert(result)
+                }
+            });
+        });
+</script>
+    }
