@@ -521,5 +521,12 @@
             </summary>
             <returns></returns>
         </member>
+        <member name="M:FreeShareAPI.Controllers.ProductController.GetImageById(System.Int32)">
+            <summary>
+            get base64String by id
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
     </members>
 </doc>

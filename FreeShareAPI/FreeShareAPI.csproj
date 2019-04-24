@@ -228,6 +228,9 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>FreeShareEntities.edmx</DependentUpon>
     </Compile>
+    <Compile Include="Models\ImageDemo.cs">
+      <DependentUpon>FreeShareEntities.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\Product.cs">
       <DependentUpon>FreeShareEntities.tt</DependentUpon>
     </Compile>
@@ -304,6 +307,7 @@
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
+    <Content Include="Views\Home\DisplayImage.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />

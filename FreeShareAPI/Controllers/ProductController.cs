@@ -1,10 +1,16 @@
 ﻿using FreeShareAPI.Models;
 using FreeShareAPI.Models.Dbmodel;
+using System;
 using System.Collections.Generic;
+using System.Data.Entity.Validation;
+using System.Diagnostics;
+using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Web;
 using System.Web.Http;
+//using System.Web.Mvc;
 
 namespace FreeShareAPI.Controllers
 {
@@ -137,18 +143,75 @@ namespace FreeShareAPI.Controllers
             //    var values = Request.Headers.GetValues("Origin");
             //    // Do stuff with the values... probably .FirstOrDefault()
             //}
-            var httpRequest = HttpContext.Current.Request;
-            if (httpRequest.Files.Count > 0)
+            HttpRequest Request = HttpContext.Current.Request;
+            try
             {
-                foreach (string file in httpRequest.Files)
+                if (Request.Files.Count > 0)
                 {
-                    var postedFile = httpRequest.Files[file];
-                    var filePath = HttpContext.Current.Server.MapPath("~/Images/" + postedFile.FileName);
-                    postedFile.SaveAs(filePath);
+                    using (FreeShareEntities obj = new FreeShareEntities())
+                    {
+                        foreach (string file in Request.Files)
+                        {
+                            var postedFile = Request.Files[file];
+                            var filePath = HttpContext.Current.Server.MapPath("~/Images/" + postedFile.FileName);
+                            postedFile.SaveAs(filePath);
+
+                            ImageDemo image = new ImageDemo();
+                            image.Name = Request["username"];
+                            image.Image = postedFile.FileName;
+                            obj.ImageDemoes.Add(image);
+                            obj.SaveChanges();
+                        }
+                    }
+                    return Ok(true);
                 }
-                return Ok();
+            }
+            catch (DbEntityValidationException dbEx)
+            {
+                foreach (var validationErrors in dbEx.EntityValidationErrors)
+                {
+                    foreach (var validationError in validationErrors.ValidationErrors)
+                    {
+                        Trace.TraceInformation("Property: {0} Error: {1}", validationError.PropertyName, validationError.ErrorMessage);
+                    }
+                }
             }
             return NotFound();
         }
+
+        public string ImageToByteArray(string imageData)
+        {
+            using (var ms = new MemoryStream())
+            {
+                Image imageIn = Image.FromFile(HttpContext.Current.Server.MapPath("~/Images/"+imageData));
+                imageIn.Save(ms, imageIn.RawFormat);
+                return "data:image/png;base64," + Convert.ToBase64String(ms.ToArray());
+            }
+        }
+
+
+        /// <summary>
+        /// get base64String by id
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [HttpGet]
+        [Route("GetImageById/{id}")]
+        public IHttpActionResult GetImageById(int id)
+        {
+            using (FreeShareEntities obj = new FreeShareEntities())
+            {
+                ImageDemo imageData = obj.ImageDemoes.FirstOrDefault(x => x.Id == id);
+                if (imageData != null)
+                {
+                    ImageDemo image = new ImageDemo();
+                    image.Name = imageData.Name;
+                    image.Image = ImageToByteArray(imageData.Image);
+                    return Ok(image);
+                }
+                return NotFound();
+            }
+        }
+
     }
 }
