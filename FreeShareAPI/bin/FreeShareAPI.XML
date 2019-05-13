@@ -528,5 +528,18 @@
             <param name="id"></param>
             <returns></returns>
         </member>
+        <member name="M:FreeShareAPI.Controllers.TokenController.login(FreeShareAPI.Models.Dbmodel.UserModel)">
+            <summary>
+            Get token for given credentials
+            </summary>
+            <param name="username"></param>
+            <param name="password"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FreeShareAPI.Controllers.TokenController.Register(FreeShareAPI.Models.Dbmodel.UserModel)">
+            <summary>
+            Register a new user
+            </summary>
+        </member>
     </members>
 </doc>

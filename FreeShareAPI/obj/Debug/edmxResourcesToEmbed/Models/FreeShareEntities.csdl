@@ -3,6 +3,7 @@
   <EntityContainer Name="FreeShareEntities" annotation:LazyLoadingEnabled="true">
     <EntitySet Name="Products" EntityType="FreeShareModel.Product" />
     <EntitySet Name="ImageDemoes" EntityType="FreeShareModel.ImageDemo" />
+    <EntitySet Name="Users" EntityType="FreeShareModel.User" />
   </EntityContainer>
   <EntityType Name="Product">
     <Key>
@@ -19,5 +20,13 @@
     <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
     <Property Name="Name" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
     <Property Name="Image" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+  </EntityType>
+  <EntityType Name="User">
+    <Key>
+      <PropertyRef Name="User_id" />
+    </Key>
+    <Property Name="User_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Username" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Password" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
   </EntityType>
 </Schema>
