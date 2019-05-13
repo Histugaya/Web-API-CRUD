@@ -536,6 +536,13 @@
             <param name="password"></param>
             <returns></returns>
         </member>
+        <member name="M:FreeShareAPI.Controllers.TokenController.ValidateToken(System.String)">
+             <summary>
+            Validate token with secret key
+             </summary>
+             <param name="authToken"></param>
+             <returns></returns>
+        </member>
         <member name="M:FreeShareAPI.Controllers.TokenController.Register(FreeShareAPI.Models.Dbmodel.UserModel)">
             <summary>
             Register a new user
