@@ -14,6 +14,7 @@ using FreeShareAPI.Models;
 using FreeShareAPI.Models.Dbmodel;
 using System.Data.Entity.Validation;
 using System.Diagnostics;
+using System.Security.Principal;
 
 namespace FreeShareAPI.Controllers
 {
@@ -39,7 +40,7 @@ namespace FreeShareAPI.Controllers
         {
             if (CheckUser(userModel))
             {
-                bool admin = true;
+                bool admin = false;
                 string token = GenerateToken(userModel.Username, admin);
                 return Ok(token);
             }
@@ -58,7 +59,7 @@ namespace FreeShareAPI.Controllers
                     decodePassword = hashPassword(userModel.Password);
                     User user = obj.Users.FirstOrDefault(x => x.Username == userModel.Username
                                                          && x.Password == decodePassword);
-                    if (user!=null)
+                    if (user != null)
                     {
                         result = true;
                     }
@@ -69,115 +70,64 @@ namespace FreeShareAPI.Controllers
 
         public string GenerateToken(string username, bool admin, int expireMinutes = 2)
         {
-            var symmetricKey = Convert.FromBase64String(secretkey);
-
-            //string issuer, audience;
-
-            JwtSecurityTokenHandler tokenHandler = new JwtSecurityTokenHandler();
-            //SigningCredentials signingKey = new SigningCredentials(new SymmetricSecurityKey(symmetricKey), SecurityAlgorithms.HmacSha256Signature);
             DateTime now = DateTime.UtcNow;
             DateTime expires = now.AddMinutes(Convert.ToInt32(expireMinutes));
+            var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretkey));
+            var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
 
-            JwtSecurityToken token = new JwtSecurityToken();
+            JwtHeader header = new JwtHeader(credentials);
 
-            //JwtSecurityToken token = new JwtSecurityToken(issuer = null, audience = null,
-            //                                              System.Collections.IEnumerable<Claim> claims = null, 
-            //                                              now, expires, signingKey);
-            token.Payload["username"] = username;
-            token.Payload["admin"] = admin;
-            token.Payload["expiryDate"] = expires;
+            var payload = new JwtPayload {
+                {"username ", username},
+                {"admin", admin},
+                {"expiryDate", expires}
+         };
 
-            //var tokenDescriptor = new SecurityTokenDescriptor
-            //{
-            //    Subject = new ClaimsIdentity(new[]
-            //            {
-            //            new Claim(ClaimTypes.Name, username),
-            //        }),
+            var secToken = new JwtSecurityToken(header, payload);
+            var handler = new JwtSecurityTokenHandler();
 
-            //    Expires = expires,
+            return handler.WriteToken(secToken);
 
-            //    SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(symmetricKey), SecurityAlgorithms.HmacSha256Signature)
-            //};
-
-            //var stoken = tokenHandler.CreateToken(token);
-            var tokenSecure = tokenHandler.WriteToken(token);
-
-            return tokenSecure;
         }
 
-        //public bool validateToken(string token)
-        //{
-        //    bool result = false;
+        /// <summary>
+        ///Validate token with secret key
+        /// </summary>
+        /// <param name="authToken"></param>
+        /// <returns></returns>
+        [HttpGet]
+        [Route("ValidateToken")]
+        public bool ValidateToken(string authToken)
+        {
+            try
+            {
+                var tokenHandler = new JwtSecurityTokenHandler();
+                var validationParameters = GetValidationParameters();
 
-        //    var symmetricKey = Convert.FromBase64String(secretkey);
-        //    SigningCredentials signingKey = new SigningCredentials(new SymmetricSecurityKey(symmetricKey), SecurityAlgorithms.HmacSha256Signature);
+                SecurityToken validatedToken;
+                IPrincipal principal = tokenHandler.ValidateToken(authToken, validationParameters, out validatedToken);
+                return true;
+            }catch(Exception ex)
+            {
+                return false;
+            }
 
-        //    SecurityToken validatedToken;
+            
+        }
 
-        //    TokenValidationParameters validationParameters =
-        //         new TokenValidationParameters
-        //         {
-        //             IssuerSigningKeys = signingKey;
-        //         };
-        //    JwtSecurityTokenHandler tokenHandler = new JwtSecurityTokenHandler();
-        //    ClaimsPrincipal principal = tokenHandler.ValidateToken(token, TokenValidationParameters,out validatedToken);
-        //    return result;
-        //}
+        public TokenValidationParameters GetValidationParameters()
+        {
+            return new TokenValidationParameters()
+            {
+                ValidateLifetime = false, // Because there is no expiration in the generated token
+                ValidateAudience = false, // Because there is no audiance in the generated token
+                ValidateIssuer = false,   // Because there is no issuer in the generated token
+                ValidIssuer = "Sample",
+                ValidAudience = "Sample",
+                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretkey)) // The same key as the one that generate the token
+            };
+        }
 
-        //public bool validateSignature(string token)
-        //{
-        //    string[] tokenValue = token.Split('.');
-        //    string header = tokenValue[0];
-        //    string data = tokenValue[1];
-
-        //    bool result = false;
-
-        //    SecretKeySpec secret = new SecretKeySpec(secretKey.getBytes(), "HmacSHA256");
-        //    HMAC mac = HMAC.getInstance("HmacSHA256");
-        //    mac.init(secret);
-
-        //    String body = header + "." + data;
-        //    byte[] hmacDataBytes = mac.doFinal(body.getBytes(StandardCharsets.UTF_8.name()));
-        //    String hmacData = Base64.getUrlEncoder().encodeToString(hmacDataBytes);
-
-        //    if (hmacData.equals(signature))
-        //        result = true;
-
-        //    return result;
-        //}
-
-        //public bool validateSignature(string token)
-        //{
-        //    var parts = token.Split('.');
-        //    var header = parts[0];
-        //    var payload = parts[1];
-        //    byte[] crypto = Base64UrlDecode(parts[2]);
-
-        //    var headerJson = Encoding.UTF8.GetString(Base64UrlDecode(header));
-        //    var headerData = JObject.Parse(headerJson);
-        //    var payloadJson = Encoding.UTF8.GetString(Base64UrlDecode(payload));
-        //    var payloadData = JObject.Parse(payloadJson);
-
-        //    if (verify)
-        //    {
-        //        var bytesToSign = Encoding.UTF8.GetBytes(string.Concat(header, ".", payload));
-        //        var keyBytes = Encoding.UTF8.GetBytes(key);
-        //        var algorithm = (string)headerData["alg"];
-
-        //        var signature = HashAlgorithms[GetHashAlgorithm(algorithm)](keyBytes, bytesToSign);
-        //        var decodedCrypto = Convert.ToBase64String(crypto);
-        //        var decodedSignature = Convert.ToBase64String(signature);
-
-        //        if (decodedCrypto != decodedSignature)
-        //        {
-        //            throw new ApplicationException(string.Format("Invalid signature. Expected {0} got {1}", decodedCrypto, decodedSignature));
-        //        }
-        //    }
-
-        //    return payloadData.ToString();
-        //}
-
-      
         public string hashPassword(string password)
         {
 
@@ -236,4 +186,4 @@ namespace FreeShareAPI.Controllers
             return NotFound();
         }
     }
-} 
+}
