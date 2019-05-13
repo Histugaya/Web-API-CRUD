@@ -7,6 +7,7 @@
       <Diagram DiagramId="e387a609094b4c609e1c4f5ee89cb183" Name="Diagram1">
         <EntityTypeShape EntityType="FreeShareModel.Product" Width="1.5" PointX="0.75" PointY="0.75" />
         <EntityTypeShape EntityType="FreeShareModel.ImageDemo" Width="1.5" PointX="3.375" PointY="0.75" />
+        <EntityTypeShape EntityType="FreeShareModel.User" Width="1.5" PointX="0.75" PointY="3.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

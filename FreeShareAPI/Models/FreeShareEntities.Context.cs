@@ -27,5 +27,6 @@ namespace FreeShareAPI.Models
     
         public virtual DbSet<Product> Products { get; set; }
         public virtual DbSet<ImageDemo> ImageDemoes { get; set; }
+        public virtual DbSet<User> Users { get; set; }
     }
 }

@@ -21,6 +21,7 @@ namespace FreeShareAPI.Controllers
         /// Get all the product details
         /// </summary>
         /// <returns></returns>
+        //[Authorize]
         [HttpGet]
         [Route("GetAllProductDetails")]
         public IHttpActionResult GetAllProduct()
