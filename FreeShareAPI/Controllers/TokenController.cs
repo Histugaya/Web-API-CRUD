@@ -15,6 +15,7 @@ using FreeShareAPI.Models.Dbmodel;
 using System.Data.Entity.Validation;
 using System.Diagnostics;
 using System.Security.Principal;
+using System.Web;
 
 namespace FreeShareAPI.Controllers
 {
@@ -29,7 +30,7 @@ namespace FreeShareAPI.Controllers
         }
 
         /// <summary>
-        /// Get token for given credentials
+        /// Authenticate user with given credentials
         /// </summary>
         /// <param name="username"></param>
         /// <param name="password"></param>
@@ -90,13 +91,6 @@ namespace FreeShareAPI.Controllers
 
         }
 
-        /// <summary>
-        ///Validate token with secret key
-        /// </summary>
-        /// <param name="authToken"></param>
-        /// <returns></returns>
-        [HttpGet]
-        [Route("ValidateToken")]
         public bool ValidateToken(string authToken)
         {
             try
@@ -128,7 +122,7 @@ namespace FreeShareAPI.Controllers
             };
         }
 
-        public string hashPassword(string password)
+        public string HashPassword(string password)
         {
 
             string hash;
@@ -147,13 +141,12 @@ namespace FreeShareAPI.Controllers
         }
 
         /// <summary>
-        /// Register a new user
+        /// Register a new user with given credentials
         /// </summary>
         [HttpPost]
         [Route("Register")]
         public IHttpActionResult Register([FromBody] UserModel userModel)
         {
-            //bool result = false;
             string secretPassword;
             try
             {
@@ -164,7 +157,7 @@ namespace FreeShareAPI.Controllers
                         {
                             User user = new User();
                             user.Username = userModel.Username;
-                            secretPassword = hashPassword(userModel.Password);
+                            secretPassword = HashPassword(userModel.Password);
                             user.Password = secretPassword;
                             obj.Users.Add(user);
                             obj.SaveChanges();
@@ -184,6 +177,40 @@ namespace FreeShareAPI.Controllers
                 }
             }
             return NotFound();
+        }
+
+        /// <summary>
+        /// Get all the product details
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        [Route("GetAllProductDetails")]
+        public IHttpActionResult GetAllProduct()
+        {
+            if(CheckRequestHeader())
+            {
+                using (FreeShareEntities obj = new FreeShareEntities())
+                {
+                    List<Product> product = new List<Product>();
+                    product = obj.Products.ToList();
+                    return Ok(product);
+                }
+            }
+            return NotFound();
+            
+        }
+
+        public bool CheckRequestHeader()
+        {
+            bool result = false;
+            HttpContext httpContext = HttpContext.Current;
+            string authHeader = httpContext.Request.Headers["Authorization"];
+            if (authHeader != null && authHeader.StartsWith("bearer", StringComparison.OrdinalIgnoreCase))
+            {
+                var tokenStr = authHeader.Substring("Bearer ".Length).Trim();
+                result = ValidateToken(tokenStr);
+            }
+            return result;
         }
     }
 }
