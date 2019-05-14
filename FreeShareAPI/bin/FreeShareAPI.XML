@@ -548,5 +548,11 @@
             Register a new user
             </summary>
         </member>
+        <member name="M:FreeShareAPI.Controllers.TokenController.GetAllProduct">
+            <summary>
+            Get all the product details
+            </summary>
+            <returns></returns>
+        </member>
     </members>
 </doc>
