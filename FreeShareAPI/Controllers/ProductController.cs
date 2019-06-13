@@ -26,12 +26,20 @@ namespace FreeShareAPI.Controllers
         [Route("GetAllProductDetails")]
         public IHttpActionResult GetAllProduct()
         {
-            using (FreeShareEntities obj = new FreeShareEntities())
+            try
             {
-                List<Product> product = new List<Product>();
-                product = obj.Products.ToList();
-                return Ok(product);
+                using (FreeShareEntities obj = new FreeShareEntities())
+                {
+                    List<Product> product = new List<Product>();
+                    product = obj.Products.ToList();
+                    return Ok(product);
+                }
+            }catch(Exception ex)
+            {
+                //need to log this exception
+                return InternalServerError();
             }
+            
         }
 
         /// <summary>
@@ -44,18 +52,25 @@ namespace FreeShareAPI.Controllers
         public IHttpActionResult InsertProduct([FromBody] ProductModel productModel)
         {
             bool result = false;
-            if (!string.IsNullOrEmpty(productModel.ProductName))
-            //if(product!=null)
+            try
             {
-                using (FreeShareEntities obj = new FreeShareEntities())
+                //if (!string.IsNullOrEmpty(productModel.ProductName))
+                if (productModel != null)
                 {
-                    Product productobj = new Product();
-                    productobj.ProductName = productModel.ProductName;
-                    productobj.Deleted = productModel.Deleted;
-                    obj.Products.Add(productobj);
-                    obj.SaveChanges();
-                    result = true;
+                    using (FreeShareEntities obj = new FreeShareEntities())
+                    {
+                        Product productobj = new Product();
+                        productobj.ProductName = productModel.ProductName;
+                        productobj.Deleted = productModel.Deleted;
+                        obj.Products.Add(productobj);
+                        obj.SaveChanges();
+                        result = true;
+                        return Ok(result);
+                    }
                 }
+            }catch(Exception ex)
+            {
+                return InternalServerError();
             }
             return Ok(result);
         }
@@ -70,20 +85,30 @@ namespace FreeShareAPI.Controllers
         public IHttpActionResult DeleteProduct(int id)
         {
             bool result = false;
-            if (id != 0)
+            try
             {
-                using (FreeShareEntities obj = new FreeShareEntities())
+                if (id != 0)
                 {
-                    Product product = obj.Products.FirstOrDefault(x => x.ProductId == id);
-                    if (product != null)
+                    using (FreeShareEntities obj = new FreeShareEntities())
                     {
-                        obj.Products.Remove(product);
-                        obj.SaveChanges();
-                        result = true;
+                        Product product = obj.Products.FirstOrDefault(x => x.ProductId == id);
+                        if (product != null)
+                        {
+                            obj.Products.Remove(product);
+                            obj.SaveChanges();
+                            result = true;
+                            return Ok(result);
+                        }
+
                     }
                 }
             }
-            return Ok(result);
+            catch(Exception ex)
+            {
+
+            }
+            return BadRequest();
+
         }
 
         /// <summary>
@@ -95,12 +120,18 @@ namespace FreeShareAPI.Controllers
         [Route("GetProductById/{id}")]
         public IHttpActionResult GetProductById(int id)
         {
-            using (FreeShareEntities obj = new FreeShareEntities())
+            if (id != 0)
             {
-                Product product = new Product();
-                product = obj.Products.FirstOrDefault(x => x.ProductId == id);
-                return Ok(product);
+                using (FreeShareEntities obj = new FreeShareEntities())
+                {
+                    Product product = new Product();
+                    product = obj.Products.FirstOrDefault(x => x.ProductId == id);
+                    if(product!=null)
+                    return Ok(product);
+                }
             }
+            return NotFound();
+           
         }
 
 
@@ -125,10 +156,11 @@ namespace FreeShareAPI.Controllers
                         product.Deleted = productModel.Deleted;
                         obj.SaveChanges();
                         result = true;
+                        return Ok(result);
                     }
                 }
             }
-            return Ok(result);
+            return NotFound();
         }
 
         /// <summary>
@@ -182,12 +214,18 @@ namespace FreeShareAPI.Controllers
 
         public string ImageToByteArray(string imageData)
         {
-            using (var ms = new MemoryStream())
+            string image = string.Empty;
+            if (!String.IsNullOrEmpty(imageData))
             {
-                Image imageIn = Image.FromFile(HttpContext.Current.Server.MapPath("~/Images/"+imageData));
-                imageIn.Save(ms, imageIn.RawFormat);
-                return "data:image/png;base64," + Convert.ToBase64String(ms.ToArray());
+                using (var ms = new MemoryStream())
+                {
+                    Image imageIn = Image.FromFile(HttpContext.Current.Server.MapPath("~/Images/" + imageData));
+                    imageIn.Save(ms, imageIn.RawFormat);
+                    return "data:image/png;base64," + Convert.ToBase64String(ms.ToArray());
+                }
             }
+            return image;
+            
         }
 
 
@@ -202,16 +240,19 @@ namespace FreeShareAPI.Controllers
         {
             using (FreeShareEntities obj = new FreeShareEntities())
             {
-                ImageDemo imageData = obj.ImageDemoes.FirstOrDefault(x => x.Id == id);
-                if (imageData != null)
+                if (id != 0)
                 {
-                    ImageDemo image = new ImageDemo();
-                    image.Name = imageData.Name;
-                    image.Image = ImageToByteArray(imageData.Image);
-                    return Ok(image);
+                    ImageDemo imageData = obj.ImageDemoes.FirstOrDefault(x => x.Id == id);
+                    if (imageData != null)
+                    {
+                        ImageDemo image = new ImageDemo();
+                        image.Name = imageData.Name;
+                        image.Image = ImageToByteArray(imageData.Image);
+                        return Ok(image);
+                    }
                 }
-                return NotFound();
             }
+            return NotFound();
         }
 
     }

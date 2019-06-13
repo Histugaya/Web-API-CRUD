@@ -57,7 +57,7 @@ namespace FreeShareAPI.Controllers
             {
                 using (FreeShareEntities obj = new FreeShareEntities())
                 {
-                    decodePassword = hashPassword(userModel.Password);
+                    decodePassword = HashPassword(userModel.Password);
                     User user = obj.Users.FirstOrDefault(x => x.Username == userModel.Username
                                                          && x.Password == decodePassword);
                     if (user != null)
@@ -211,6 +211,21 @@ namespace FreeShareAPI.Controllers
                 result = ValidateToken(tokenStr);
             }
             return result;
+        }
+
+        [HttpGet]
+        [Route("CheckResponseType")]
+        public IHttpActionResult checkForResponseType() {
+            try
+            {
+                throw null;
+                return Ok();
+            }
+            catch(Exception ex)
+            {
+                return NotFound();
+            }
+            
         }
     }
 }
