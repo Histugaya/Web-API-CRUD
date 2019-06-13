@@ -11,7 +11,8 @@ namespace FreeShareAPI
         public static void Register(HttpConfiguration config)
         {
             // Web API configuration and services
-            config.EnableCors(new EnableCorsAttribute("http://localhost:4200", headers: "*", methods: "*"));
+            //config.EnableCors(new EnableCorsAttribute("http://ourfreeshare.com", headers: "*", methods: "*")); //for live
+            config.EnableCors(new EnableCorsAttribute("http://localhost:4200", headers: "*", methods: "*")); //for local
 
             // Web API routes
             config.MapHttpAttributeRoutes();
