@@ -228,7 +228,6 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ProductController.cs" />
     <Compile Include="Controllers\TokenController.cs" />
-    <Compile Include="Controllers\ValuesController.cs" />
     <Compile Include="CustomAttribute\RoleAuthorize.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
