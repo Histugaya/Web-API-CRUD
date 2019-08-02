@@ -481,6 +481,22 @@
             </summary>
             <param name="documentPath">The physical path to XML document.</param>
         </member>
+        <member name="T:FreeShareAPI.Controllers.HomeController">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:FreeShareAPI.Controllers.HomeController.Index">
+            <summary>
+            
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:FreeShareAPI.Controllers.ProductController">
+            <summary>
+            
+            </summary>
+        </member>
         <member name="M:FreeShareAPI.Controllers.ProductController.GetAllProduct">
             <summary>
             Get all the product details
@@ -519,6 +535,13 @@
             <summary>
             upload image 
             </summary>
+            <returns></returns>
+        </member>
+        <member name="M:FreeShareAPI.Controllers.ProductController.ImageToByteArray(System.String)">
+            <summary>
+            
+            </summary>
+            <param name="imageData"></param>
             <returns></returns>
         </member>
         <member name="M:FreeShareAPI.Controllers.ProductController.GetImageById(System.Int32)">
