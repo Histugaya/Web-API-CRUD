@@ -16,14 +16,20 @@ using System.Data.Entity.Validation;
 using System.Diagnostics;
 using System.Security.Principal;
 using System.Web;
+using FreeShareAPI.CustomAttribute;
 
 namespace FreeShareAPI.Controllers
 {
+    /// <summary>
+    /// 
+    /// </summary>
     [RoutePrefix("Api/Token")]
     public class TokenController : ApiController
     {
         private string secretkey;
-
+        /// <summary>
+        /// 
+        /// </summary>
         public TokenController()
         {
             secretkey = ConfigurationManager.AppSettings["Secret"];
@@ -37,38 +43,48 @@ namespace FreeShareAPI.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("login")]
-        public IHttpActionResult login([FromBody] UserModel userModel)
+        //public IHttpActionResult login([FromBody] UserModel userModel)
+        public IHttpActionResult login(string username, string password)
+
         {
-            if (CheckUser(userModel))
+            if (CheckUser(username,password))
             {
                 bool admin = false;
-                string token = GenerateToken(userModel.Username, admin);
+                string token = GenerateToken(username, admin);
                 return Ok(token);
             }
-
-            return Ok(false);
+            return Ok("login failed");
         }
 
-        public bool CheckUser(UserModel userModel)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="username"></param>
+        /// <param name="password"></param>
+        /// <returns></returns>
+        public bool CheckUser(string username, string password)
         {
             bool result = false;
             string decodePassword;
-            if (userModel != null)
+            if (!string.IsNullOrEmpty(username) && !string.IsNullOrEmpty(password))
             {
                 using (FreeShareEntities obj = new FreeShareEntities())
                 {
-                    decodePassword = HashPassword(userModel.Password);
-                    User user = obj.Users.FirstOrDefault(x => x.Username == userModel.Username
+                    decodePassword = HashPassword(password);
+                    return obj.Users.Any(x => x.Username == username
                                                          && x.Password == decodePassword);
-                    if (user != null)
-                    {
-                        result = true;
-                    }
                 }
             }
             return result;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="username"></param>
+        /// <param name="admin"></param>
+        /// <param name="expireMinutes"></param>
+        /// <returns></returns>
         public string GenerateToken(string username, bool admin, int expireMinutes = 2)
         {
             DateTime now = DateTime.UtcNow;
@@ -76,44 +92,62 @@ namespace FreeShareAPI.Controllers
             var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretkey));
             var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
 
-            JwtHeader header = new JwtHeader(credentials);
+            //JwtHeader header = new JwtHeader(credentials);
 
-            var payload = new JwtPayload {
-                {"username ", username},
-                {"admin", admin},
-                {"expiryDate", expires}
-         };
+         //   var payload = new JwtPayload {
+         //       {"username ", username},
+         //       {"admin", admin},
+         //       {"expiryDate", expires}
+         //};
 
-            var secToken = new JwtSecurityToken(header, payload);
+            var secToken = new JwtSecurityToken(
+                 issuer: "",
+                 audience: "",
+                 claims: null ,
+                 expires: expires,
+                 signingCredentials: credentials
+                //header, payload
+                );
+            secToken.Payload["username"] = username;
             var handler = new JwtSecurityTokenHandler();
-
             return handler.WriteToken(secToken);
 
         }
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="authToken"></param>
+        /// <returns></returns>
         public bool ValidateToken(string authToken)
         {
             try
             {
+                var result = false;
                 var tokenHandler = new JwtSecurityTokenHandler();
                 var validationParameters = GetValidationParameters();
-
-                SecurityToken validatedToken;
-                IPrincipal principal = tokenHandler.ValidateToken(authToken, validationParameters, out validatedToken);
-                return true;
-            }catch(Exception ex)
+                var lifeTime = new JwtSecurityTokenHandler().ReadToken(authToken).ValidTo;
+                if (lifeTime > DateTime.UtcNow)
+                {
+                    SecurityToken validatedToken;
+                    IPrincipal principal = tokenHandler.ValidateToken(authToken, validationParameters, out validatedToken);
+                    result = true;
+                }
+                return result;
+            }
+            catch (Exception ex)
             {
                 return false;
             }
-
-            
         }
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
         public TokenValidationParameters GetValidationParameters()
         {
             return new TokenValidationParameters()
             {
-                ValidateLifetime = false, // Because there is no expiration in the generated token
+                ValidateLifetime = true, // Because there is no expiration in the generated token
                 ValidateAudience = false, // Because there is no audiance in the generated token
                 ValidateIssuer = false,   // Because there is no issuer in the generated token
                 ValidIssuer = "Sample",
@@ -122,6 +156,11 @@ namespace FreeShareAPI.Controllers
             };
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="password"></param>
+        /// <returns></returns>
         public string HashPassword(string password)
         {
 
@@ -145,19 +184,18 @@ namespace FreeShareAPI.Controllers
         /// </summary>
         [HttpPost]
         [Route("Register")]
-        public IHttpActionResult Register([FromBody] UserModel userModel)
+        public IHttpActionResult Register(string username, string password)
         {
             string secretPassword;
             try
             {
-                if (userModel != null)
+                if (!string.IsNullOrEmpty(username) && !string.IsNullOrEmpty(password))
                 {
-                    {
                         using (FreeShareEntities obj = new FreeShareEntities())
                         {
                             User user = new User();
-                            user.Username = userModel.Username;
-                            secretPassword = HashPassword(userModel.Password);
+                            user.Username = username;
+                            secretPassword = HashPassword(password);
                             user.Password = secretPassword;
                             obj.Users.Add(user);
                             obj.SaveChanges();
@@ -165,7 +203,6 @@ namespace FreeShareAPI.Controllers
                         }
                     }
                 }
-            }
             catch (DbEntityValidationException dbEx)
             {
                 foreach (var validationErrors in dbEx.EntityValidationErrors)
@@ -183,11 +220,13 @@ namespace FreeShareAPI.Controllers
         /// Get all the product details
         /// </summary>
         /// <returns></returns>
+        
         [HttpGet]
         [Route("GetAllProductDetails")]
+        [RoleAuthorize]
         public IHttpActionResult GetAllProduct()
         {
-            if(CheckRequestHeader())
+            if (CheckRequestHeader())
             {
                 using (FreeShareEntities obj = new FreeShareEntities())
                 {
@@ -196,10 +235,14 @@ namespace FreeShareAPI.Controllers
                     return Ok(product);
                 }
             }
-            return NotFound();
+            return Ok("token expired");
             
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
         public bool CheckRequestHeader()
         {
             bool result = false;
@@ -213,19 +256,5 @@ namespace FreeShareAPI.Controllers
             return result;
         }
 
-        [HttpGet]
-        [Route("CheckResponseType")]
-        public IHttpActionResult checkForResponseType() {
-            try
-            {
-                throw null;
-                return Ok();
-            }
-            catch(Exception ex)
-            {
-                return NotFound();
-            }
-            
-        }
     }
 }

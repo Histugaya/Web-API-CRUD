@@ -14,6 +14,9 @@ using System.Web.Http;
 
 namespace FreeShareAPI.Controllers
 {
+    /// <summary>
+    /// 
+    /// </summary>
     [RoutePrefix("Api/Product")]
     public class ProductController : ApiController
     {
@@ -21,7 +24,6 @@ namespace FreeShareAPI.Controllers
         /// Get all the product details
         /// </summary>
         /// <returns></returns>
-        //[Authorize]
         [HttpGet]
         [Route("GetAllProductDetails")]
         public IHttpActionResult GetAllProduct()
@@ -212,6 +214,11 @@ namespace FreeShareAPI.Controllers
             return NotFound();
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="imageData"></param>
+        /// <returns></returns>
         public string ImageToByteArray(string imageData)
         {
             string image = string.Empty;
