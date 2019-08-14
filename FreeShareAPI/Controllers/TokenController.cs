@@ -49,13 +49,21 @@ namespace FreeShareAPI.Controllers
         [Route("login")]
         public IHttpActionResult login([FromBody] UserModel userModel)
         {
-            if (security.CheckUser(userModel))
+            try
             {
-                bool admin = true;
-                string token = security.GenerateToken(userModel.Username, admin);
-                return Ok(token);
+                if (security.CheckUser(userModel))
+                {
+                    bool admin = true;
+                    string token = security.GenerateToken(userModel.Username, admin);
+                    return Ok(token);
+                }
+                return Unauthorized();
             }
-            return Ok(false);
+            catch(Exception ex)
+            {
+                return InternalServerError();
+            }
+            
         }
 
         /// <summary>
@@ -73,6 +81,7 @@ namespace FreeShareAPI.Controllers
                    token.Register(user);
                    return Ok(true);
                 }
+                return BadRequest();
             }
             catch (DbEntityValidationException dbEx)
             {
@@ -83,8 +92,8 @@ namespace FreeShareAPI.Controllers
                         Trace.TraceInformation("Property: {0} Error: {1}", validationError.PropertyName, validationError.ErrorMessage);
                     }
                 }
+                return InternalServerError();
             }
-            return NotFound();
         }
 
     }

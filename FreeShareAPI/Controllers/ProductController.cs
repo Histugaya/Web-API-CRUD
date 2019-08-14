@@ -1,4 +1,6 @@
 ﻿using FreeShareAPI.Common;
+using FreeShareAPI.Controllers.Base;
+using FreeShareAPI.CustomAttribute;
 using FreeShareAPI.Models;
 using FreeShareAPI.Models.Dbmodel;
 using System;
@@ -18,8 +20,10 @@ namespace FreeShareAPI.Controllers
     /// <summary>
     /// 
     /// </summary>
+
+    [RoleAuthorize]
     [RoutePrefix("Api/Product")]
-    public class ProductController : ApiController
+    public class ProductController : BaseApiController
     {
         private Security security;
         /// <summary>
@@ -40,16 +44,12 @@ namespace FreeShareAPI.Controllers
         {
             try
             {
-                if (security.CheckRequestHeader())
+                using (FreeShareEntities obj = new FreeShareEntities())
                 {
-                    using (FreeShareEntities obj = new FreeShareEntities())
-                    {
-                        List<Product> product = new List<Product>();
-                        product = obj.Products.ToList();
-                        return Ok(product);
-                    }
+                    List<Product> product = new List<Product>();
+                    product = obj.Products.ToList();
+                    return Ok(product);
                 }
-                return Ok("token expired");
             }
             catch (Exception ex)
             {
@@ -69,7 +69,6 @@ namespace FreeShareAPI.Controllers
             bool result = false;
             try
             {
-                //if (!string.IsNullOrEmpty(productModel.ProductName))
                 if (productModel != null)
                 {
                     using (FreeShareEntities obj = new FreeShareEntities())
@@ -83,11 +82,12 @@ namespace FreeShareAPI.Controllers
                         return Ok(result);
                     }
                 }
-            }catch(Exception ex)
+            }
+            catch (Exception ex)
             {
                 return InternalServerError();
             }
-            return Ok(result);
+            return BadRequest();
         }
 
         /// <summary>
@@ -118,9 +118,9 @@ namespace FreeShareAPI.Controllers
                     }
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
-
+                return InternalServerError();
             }
             return BadRequest();
 
@@ -135,18 +135,24 @@ namespace FreeShareAPI.Controllers
         [Route("GetProductById/{id}")]
         public IHttpActionResult GetProductById(int id)
         {
-            if (id != 0)
+            try
             {
-                using (FreeShareEntities obj = new FreeShareEntities())
+                if (id != 0)
                 {
-                    Product product = new Product();
-                    product = obj.Products.FirstOrDefault(x => x.ProductId == id);
-                    if(product!=null)
-                    return Ok(product);
+                    using (FreeShareEntities obj = new FreeShareEntities())
+                    {
+                        Product product = new Product();
+                        product = obj.Products.FirstOrDefault(x => x.ProductId == id);
+                        if (product != null)
+                            return Ok(product);
+                    }
                 }
             }
-            return NotFound();
-           
+            catch (Exception ex)
+            {
+                return InternalServerError();
+            }
+            return BadRequest();
         }
 
 
@@ -159,25 +165,32 @@ namespace FreeShareAPI.Controllers
         [Route("UpdateProductDetails")]
         public IHttpActionResult UpdateProduct([FromBody] ProductModel productModel)
         {
-            bool result = false;
-            if (productModel.ProductId != 0 && !string.IsNullOrEmpty(productModel.ProductName))
+            try
             {
-                using (FreeShareEntities obj = new FreeShareEntities())
+                bool result = false;
+                if (productModel.ProductId != 0 && !string.IsNullOrEmpty(productModel.ProductName))
                 {
-                    Product product = obj.Products.FirstOrDefault(x => x.ProductId == productModel.ProductId);
-                    if (product != null)
+                    using (FreeShareEntities obj = new FreeShareEntities())
                     {
-                        product.ProductName = productModel.ProductName;
-                        product.Deleted = productModel.Deleted;
-                        obj.SaveChanges();
-                        result = true;
-                        return Ok(result);
+                        Product product = obj.Products.FirstOrDefault(x => x.ProductId == productModel.ProductId);
+                        if (product != null)
+                        {
+                            product.ProductName = productModel.ProductName;
+                            product.Deleted = productModel.Deleted;
+                            obj.SaveChanges();
+                            result = true;
+                            return Ok(result);
+                        }
                     }
                 }
             }
-            return NotFound();
+            catch (Exception ex)
+            {
+                return InternalServerError();
+            }
+            return BadRequest();
         }
-        
+
         //[HttpPost]
         //[Route("UploadImage")]
         //public IHttpActionResult UploadImage()
@@ -236,7 +249,7 @@ namespace FreeShareAPI.Controllers
         //        }
         //    }
         //    return image;
-            
+
         //}
 
         //[HttpGet]
