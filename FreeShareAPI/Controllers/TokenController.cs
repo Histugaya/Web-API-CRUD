@@ -17,6 +17,9 @@ using System.Diagnostics;
 using System.Security.Principal;
 using System.Web;
 using FreeShareAPI.CustomAttribute;
+using FreeShareAPI.Converter;
+using FreeShareAPI.DataManager;
+using FreeShareAPI.Common;
 
 namespace FreeShareAPI.Controllers
 {
@@ -26,157 +29,33 @@ namespace FreeShareAPI.Controllers
     [RoutePrefix("Api/Token")]
     public class TokenController : ApiController
     {
-        private string secretkey;
+        private TokenDataManager token;
+        private Security security;
         /// <summary>
         /// 
         /// </summary>
         public TokenController()
         {
-            secretkey = ConfigurationManager.AppSettings["Secret"];
+            token = new TokenDataManager();
+            security = new Security();
         }
 
-        /// <summary>
-        /// Authenticate user with given credentials
-        /// </summary>
-        /// <param name="username"></param>
-        /// <param name="password"></param>
-        /// <returns></returns>
+       /// <summary>
+       /// 
+       /// </summary>
+       /// <param name="userModel"></param>
+       /// <returns></returns>
         [HttpPost]
         [Route("login")]
-        //public IHttpActionResult login([FromBody] UserModel userModel)
-        public IHttpActionResult login(string username, string password)
-
+        public IHttpActionResult login([FromBody] UserModel userModel)
         {
-            if (CheckUser(username,password))
+            if (security.CheckUser(userModel))
             {
-                bool admin = false;
-                string token = GenerateToken(username, admin);
+                bool admin = true;
+                string token = security.GenerateToken(userModel.Username, admin);
                 return Ok(token);
             }
-            return Ok("login failed");
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="username"></param>
-        /// <param name="password"></param>
-        /// <returns></returns>
-        public bool CheckUser(string username, string password)
-        {
-            bool result = false;
-            string decodePassword;
-            if (!string.IsNullOrEmpty(username) && !string.IsNullOrEmpty(password))
-            {
-                using (FreeShareEntities obj = new FreeShareEntities())
-                {
-                    decodePassword = HashPassword(password);
-                    return obj.Users.Any(x => x.Username == username
-                                                         && x.Password == decodePassword);
-                }
-            }
-            return result;
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="username"></param>
-        /// <param name="admin"></param>
-        /// <param name="expireMinutes"></param>
-        /// <returns></returns>
-        public string GenerateToken(string username, bool admin, int expireMinutes = 2)
-        {
-            DateTime now = DateTime.UtcNow;
-            DateTime expires = now.AddMinutes(Convert.ToInt32(expireMinutes));
-            var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretkey));
-            var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
-
-            //JwtHeader header = new JwtHeader(credentials);
-
-         //   var payload = new JwtPayload {
-         //       {"username ", username},
-         //       {"admin", admin},
-         //       {"expiryDate", expires}
-         //};
-
-            var secToken = new JwtSecurityToken(
-                 issuer: "",
-                 audience: "",
-                 claims: null ,
-                 expires: expires,
-                 signingCredentials: credentials
-                //header, payload
-                );
-            secToken.Payload["username"] = username;
-            var handler = new JwtSecurityTokenHandler();
-            return handler.WriteToken(secToken);
-
-        }
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="authToken"></param>
-        /// <returns></returns>
-        public bool ValidateToken(string authToken)
-        {
-            try
-            {
-                var result = false;
-                var tokenHandler = new JwtSecurityTokenHandler();
-                var validationParameters = GetValidationParameters();
-                var lifeTime = new JwtSecurityTokenHandler().ReadToken(authToken).ValidTo;
-                if (lifeTime > DateTime.UtcNow)
-                {
-                    SecurityToken validatedToken;
-                    IPrincipal principal = tokenHandler.ValidateToken(authToken, validationParameters, out validatedToken);
-                    result = true;
-                }
-                return result;
-            }
-            catch (Exception ex)
-            {
-                return false;
-            }
-        }
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <returns></returns>
-        public TokenValidationParameters GetValidationParameters()
-        {
-            return new TokenValidationParameters()
-            {
-                ValidateLifetime = true, // Because there is no expiration in the generated token
-                ValidateAudience = false, // Because there is no audiance in the generated token
-                ValidateIssuer = false,   // Because there is no issuer in the generated token
-                ValidIssuer = "Sample",
-                ValidAudience = "Sample",
-                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretkey)) // The same key as the one that generate the token
-            };
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="password"></param>
-        /// <returns></returns>
-        public string HashPassword(string password)
-        {
-
-            string hash;
-            var sha1 = new SHA256Managed();
-            byte[] temp = sha1.ComputeHash(Encoding.UTF8.GetBytes(password));
-
-            StringBuilder sb = new StringBuilder();
-            for (int i = 0; i < temp.Length; i++)
-            {
-                sb.Append(temp[i].ToString("x2"));
-            }
-
-            hash = sb.ToString();
-            return hash;
-
+            return Ok(false);
         }
 
         /// <summary>
@@ -184,25 +63,17 @@ namespace FreeShareAPI.Controllers
         /// </summary>
         [HttpPost]
         [Route("Register")]
-        public IHttpActionResult Register(string username, string password)
+        public IHttpActionResult Register([FromBody] UserModel userModel)
         {
-            string secretPassword;
             try
             {
-                if (!string.IsNullOrEmpty(username) && !string.IsNullOrEmpty(password))
+                if (userModel != null)
                 {
-                        using (FreeShareEntities obj = new FreeShareEntities())
-                        {
-                            User user = new User();
-                            user.Username = username;
-                            secretPassword = HashPassword(password);
-                            user.Password = secretPassword;
-                            obj.Users.Add(user);
-                            obj.SaveChanges();
-                            return Ok(true);
-                        }
-                    }
+                   User user = new UserConverter().ModelToEntity(userModel);
+                   token.Register(user);
+                   return Ok(true);
                 }
+            }
             catch (DbEntityValidationException dbEx)
             {
                 foreach (var validationErrors in dbEx.EntityValidationErrors)
@@ -214,46 +85,6 @@ namespace FreeShareAPI.Controllers
                 }
             }
             return NotFound();
-        }
-
-        /// <summary>
-        /// Get all the product details
-        /// </summary>
-        /// <returns></returns>
-        
-        [HttpGet]
-        [Route("GetAllProductDetails")]
-        [RoleAuthorize]
-        public IHttpActionResult GetAllProduct()
-        {
-            if (CheckRequestHeader())
-            {
-                using (FreeShareEntities obj = new FreeShareEntities())
-                {
-                    List<Product> product = new List<Product>();
-                    product = obj.Products.ToList();
-                    return Ok(product);
-                }
-            }
-            return Ok("token expired");
-            
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <returns></returns>
-        public bool CheckRequestHeader()
-        {
-            bool result = false;
-            HttpContext httpContext = HttpContext.Current;
-            string authHeader = httpContext.Request.Headers["Authorization"];
-            if (authHeader != null && authHeader.StartsWith("bearer", StringComparison.OrdinalIgnoreCase))
-            {
-                var tokenStr = authHeader.Substring("Bearer ".Length).Trim();
-                result = ValidateToken(tokenStr);
-            }
-            return result;
         }
 
     }
