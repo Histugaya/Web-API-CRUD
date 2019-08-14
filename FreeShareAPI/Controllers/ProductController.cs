@@ -1,4 +1,5 @@
-﻿using FreeShareAPI.Models;
+﻿using FreeShareAPI.Common;
+using FreeShareAPI.Models;
 using FreeShareAPI.Models.Dbmodel;
 using System;
 using System.Collections.Generic;
@@ -20,6 +21,15 @@ namespace FreeShareAPI.Controllers
     [RoutePrefix("Api/Product")]
     public class ProductController : ApiController
     {
+        private Security security;
+        /// <summary>
+        /// 
+        /// </summary>
+        public ProductController()
+        {
+            security = new Security();
+        }
+
         /// <summary>
         /// Get all the product details
         /// </summary>
@@ -30,18 +40,21 @@ namespace FreeShareAPI.Controllers
         {
             try
             {
-                using (FreeShareEntities obj = new FreeShareEntities())
+                if (security.CheckRequestHeader())
                 {
-                    List<Product> product = new List<Product>();
-                    product = obj.Products.ToList();
-                    return Ok(product);
+                    using (FreeShareEntities obj = new FreeShareEntities())
+                    {
+                        List<Product> product = new List<Product>();
+                        product = obj.Products.ToList();
+                        return Ok(product);
+                    }
                 }
-            }catch(Exception ex)
+                return Ok("token expired");
+            }
+            catch (Exception ex)
             {
-                //need to log this exception
                 return InternalServerError();
             }
-            
         }
 
         /// <summary>
@@ -164,103 +177,88 @@ namespace FreeShareAPI.Controllers
             }
             return NotFound();
         }
+        
+        //[HttpPost]
+        //[Route("UploadImage")]
+        //public IHttpActionResult UploadImage()
+        //{
+        //    //if (Request.Headers.Contains("Origin"))
+        //    //{
+        //    //    var values = Request.Headers.GetValues("Origin");
+        //    //    // Do stuff with the values... probably .FirstOrDefault()
+        //    //}
+        //    HttpRequest Request = HttpContext.Current.Request;
+        //    try
+        //    {
+        //        if (Request.Files.Count > 0)
+        //        {
+        //            using (FreeShareEntities obj = new FreeShareEntities())
+        //            {
+        //                foreach (string file in Request.Files)
+        //                {
+        //                    var postedFile = Request.Files[file];
+        //                    var filePath = HttpContext.Current.Server.MapPath("~/Images/" + postedFile.FileName);
+        //                    postedFile.SaveAs(filePath);
 
-        /// <summary>
-        /// upload image 
-        /// </summary>
-        /// <returns></returns>
-        [HttpPost]
-        [Route("UploadImage")]
-        public IHttpActionResult UploadImage()
-        {
-            //if (Request.Headers.Contains("Origin"))
-            //{
-            //    var values = Request.Headers.GetValues("Origin");
-            //    // Do stuff with the values... probably .FirstOrDefault()
-            //}
-            HttpRequest Request = HttpContext.Current.Request;
-            try
-            {
-                if (Request.Files.Count > 0)
-                {
-                    using (FreeShareEntities obj = new FreeShareEntities())
-                    {
-                        foreach (string file in Request.Files)
-                        {
-                            var postedFile = Request.Files[file];
-                            var filePath = HttpContext.Current.Server.MapPath("~/Images/" + postedFile.FileName);
-                            postedFile.SaveAs(filePath);
+        //                    ImageDemo image = new ImageDemo();
+        //                    image.Name = Request["username"];
+        //                    image.Image = postedFile.FileName;
+        //                    obj.ImageDemoes.Add(image);
+        //                    obj.SaveChanges();
+        //                }
+        //            }
+        //            return Ok(true);
+        //        }
+        //    }
+        //    catch (DbEntityValidationException dbEx)
+        //    {
+        //        foreach (var validationErrors in dbEx.EntityValidationErrors)
+        //        {
+        //            foreach (var validationError in validationErrors.ValidationErrors)
+        //            {
+        //                Trace.TraceInformation("Property: {0} Error: {1}", validationError.PropertyName, validationError.ErrorMessage);
+        //            }
+        //        }
+        //    }
+        //    return NotFound();
+        //}
 
-                            ImageDemo image = new ImageDemo();
-                            image.Name = Request["username"];
-                            image.Image = postedFile.FileName;
-                            obj.ImageDemoes.Add(image);
-                            obj.SaveChanges();
-                        }
-                    }
-                    return Ok(true);
-                }
-            }
-            catch (DbEntityValidationException dbEx)
-            {
-                foreach (var validationErrors in dbEx.EntityValidationErrors)
-                {
-                    foreach (var validationError in validationErrors.ValidationErrors)
-                    {
-                        Trace.TraceInformation("Property: {0} Error: {1}", validationError.PropertyName, validationError.ErrorMessage);
-                    }
-                }
-            }
-            return NotFound();
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="imageData"></param>
-        /// <returns></returns>
-        public string ImageToByteArray(string imageData)
-        {
-            string image = string.Empty;
-            if (!String.IsNullOrEmpty(imageData))
-            {
-                using (var ms = new MemoryStream())
-                {
-                    Image imageIn = Image.FromFile(HttpContext.Current.Server.MapPath("~/Images/" + imageData));
-                    imageIn.Save(ms, imageIn.RawFormat);
-                    return "data:image/png;base64," + Convert.ToBase64String(ms.ToArray());
-                }
-            }
-            return image;
+        //public string ImageToByteArray(string imageData)
+        //{
+        //    string image = string.Empty;
+        //    if (!String.IsNullOrEmpty(imageData))
+        //    {
+        //        using (var ms = new MemoryStream())
+        //        {
+        //            Image imageIn = Image.FromFile(HttpContext.Current.Server.MapPath("~/Images/" + imageData));
+        //            imageIn.Save(ms, imageIn.RawFormat);
+        //            return "data:image/png;base64," + Convert.ToBase64String(ms.ToArray());
+        //        }
+        //    }
+        //    return image;
             
-        }
+        //}
 
-
-        /// <summary>
-        /// get base64String by id
-        /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
-        [HttpGet]
-        [Route("GetImageById/{id}")]
-        public IHttpActionResult GetImageById(int id)
-        {
-            using (FreeShareEntities obj = new FreeShareEntities())
-            {
-                if (id != 0)
-                {
-                    ImageDemo imageData = obj.ImageDemoes.FirstOrDefault(x => x.Id == id);
-                    if (imageData != null)
-                    {
-                        ImageDemo image = new ImageDemo();
-                        image.Name = imageData.Name;
-                        image.Image = ImageToByteArray(imageData.Image);
-                        return Ok(image);
-                    }
-                }
-            }
-            return NotFound();
-        }
+        //[HttpGet]
+        //[Route("GetImageById/{id}")]
+        //public IHttpActionResult GetImageById(int id)
+        //{
+        //    using (FreeShareEntities obj = new FreeShareEntities())
+        //    {
+        //        if (id != 0)
+        //        {
+        //            ImageDemo imageData = obj.ImageDemoes.FirstOrDefault(x => x.Id == id);
+        //            if (imageData != null)
+        //            {
+        //                ImageDemo image = new ImageDemo();
+        //                image.Name = imageData.Name;
+        //                image.Image = ImageToByteArray(imageData.Image);
+        //                return Ok(image);
+        //            }
+        //        }
+        //    }
+        //    return NotFound();
+        //}
 
     }
 }
