@@ -78,7 +78,7 @@ namespace FreeShareAPI.Common
         /// <param name="admin"></param>
         /// <param name="expireMinutes"></param>
         /// <returns></returns>
-        public string GenerateToken(string username, bool admin, int expireMinutes = 20)
+        public string GenerateToken(string username, bool admin, int expireMinutes = 2)
         {
             DateTime now = DateTime.UtcNow;
             DateTime expires = now.AddMinutes(Convert.ToInt32(expireMinutes));

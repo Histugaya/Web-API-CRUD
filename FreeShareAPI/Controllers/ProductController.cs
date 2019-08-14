@@ -1,8 +1,6 @@
 ﻿using FreeShareAPI.Common;
 using FreeShareAPI.Controllers.Base;
 using FreeShareAPI.CustomAttribute;
-using FreeShareAPI.DataManager;
-using FreeShareAPI.Interface;
 using FreeShareAPI.Models;
 using FreeShareAPI.Models.Dbmodel;
 using System;
@@ -15,6 +13,7 @@ using System.Linq;
 using System.Net.Http;
 using System.Web;
 using System.Web.Http;
+//using System.Web.Mvc;
 
 namespace FreeShareAPI.Controllers
 {
@@ -24,8 +23,16 @@ namespace FreeShareAPI.Controllers
 
     [RoleAuthorize]
     [RoutePrefix("Api/Product")]
-    public class ProductController : BaseController<ProductDataManager>,IBaseController<ProductModel>
+    public class ProductController : BaseApiController
     {
+        private Security security;
+        /// <summary>
+        /// 
+        /// </summary>
+        public ProductController()
+        {
+            security = new Security();
+        }
 
         /// <summary>
         /// Get all the product details
@@ -33,13 +40,16 @@ namespace FreeShareAPI.Controllers
         /// <returns></returns>
         [HttpGet]
         [Route("GetAllProductDetails")]
-        public IHttpActionResult GetAll()
+        public IHttpActionResult GetAllProduct()
         {
             try
             {
-                List<ProductModel> model = new List<ProductModel>();
-                model=dataManager.GetAll();        
-                return Ok(model);
+                using (FreeShareEntities obj = new FreeShareEntities())
+                {
+                    List<Product> product = new List<Product>();
+                    product = obj.Products.ToList();
+                    return Ok(product);
+                }
             }
             catch (Exception ex)
             {
@@ -54,18 +64,30 @@ namespace FreeShareAPI.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("InsertProductDetails")]
-        public IHttpActionResult Create([FromBody] ProductModel productModel)
+        public IHttpActionResult InsertProduct([FromBody] ProductModel productModel)
         {
+            bool result = false;
             try
             {
-                dataManager.Add(productModel);
-                return Ok();
+                if (productModel != null)
+                {
+                    using (FreeShareEntities obj = new FreeShareEntities())
+                    {
+                        Product productobj = new Product();
+                        productobj.ProductName = productModel.ProductName;
+                        productobj.Deleted = productModel.Deleted;
+                        obj.Products.Add(productobj);
+                        obj.SaveChanges();
+                        result = true;
+                        return Ok(result);
+                    }
+                }
             }
             catch (Exception ex)
             {
                 return InternalServerError();
             }
-            //return BadRequest();
+            return BadRequest();
         }
 
         /// <summary>
@@ -75,40 +97,33 @@ namespace FreeShareAPI.Controllers
         /// <returns></returns>
         [HttpDelete]
         [Route("DeleteProduct/{id}")]
-        public IHttpActionResult Delete(int id)
+        public IHttpActionResult DeleteProduct(int id)
         {
+            bool result = false;
             try
             {
-                dataManager.Delete(id);
-                return Ok();
+                if (id != 0)
+                {
+                    using (FreeShareEntities obj = new FreeShareEntities())
+                    {
+                        Product product = obj.Products.FirstOrDefault(x => x.ProductId == id);
+                        if (product != null)
+                        {
+                            obj.Products.Remove(product);
+                            obj.SaveChanges();
+                            result = true;
+                            return Ok(result);
+                        }
+
+                    }
+                }
             }
             catch (Exception ex)
             {
                 return InternalServerError();
             }
-            //return BadRequest();
+            return BadRequest();
 
-        }
-
-        /// <summary>
-        /// Update product details by Id
-        /// </summary>
-        /// <param name="productModel"></param>
-        /// <returns></returns>
-        [HttpPut]
-        [Route("UpdateProductDetails")]
-        public IHttpActionResult Edit([FromBody] ProductModel productModel)
-        {
-            try
-            {
-                dataManager.Edit(productModel);
-                return Ok();
-            }
-            catch (Exception ex)
-            {
-                return InternalServerError();
-            }
-            //return BadRequest();
         }
 
         /// <summary>
@@ -118,19 +133,62 @@ namespace FreeShareAPI.Controllers
         /// <returns></returns>
         [HttpGet]
         [Route("GetProductById/{id}")]
-        public IHttpActionResult GetByID(int id)
+        public IHttpActionResult GetProductById(int id)
         {
             try
             {
-                ProductModel model = new ProductModel();
-                model=dataManager.GetByID(id);
-                return Ok(model);
+                if (id != 0)
+                {
+                    using (FreeShareEntities obj = new FreeShareEntities())
+                    {
+                        Product product = new Product();
+                        product = obj.Products.FirstOrDefault(x => x.ProductId == id);
+                        if (product != null)
+                            return Ok(product);
+                    }
+                }
             }
             catch (Exception ex)
             {
                 return InternalServerError();
             }
-            //return BadRequest();
+            return BadRequest();
+        }
+
+
+        /// <summary>
+        /// Update product details by Id
+        /// </summary>
+        /// <param name="productModel"></param>
+        /// <returns></returns>
+        [HttpPut]
+        [Route("UpdateProductDetails")]
+        public IHttpActionResult UpdateProduct([FromBody] ProductModel productModel)
+        {
+            try
+            {
+                bool result = false;
+                if (productModel.ProductId != 0 && !string.IsNullOrEmpty(productModel.ProductName))
+                {
+                    using (FreeShareEntities obj = new FreeShareEntities())
+                    {
+                        Product product = obj.Products.FirstOrDefault(x => x.ProductId == productModel.ProductId);
+                        if (product != null)
+                        {
+                            product.ProductName = productModel.ProductName;
+                            product.Deleted = productModel.Deleted;
+                            obj.SaveChanges();
+                            result = true;
+                            return Ok(result);
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                return InternalServerError();
+            }
+            return BadRequest();
         }
 
         //[HttpPost]
