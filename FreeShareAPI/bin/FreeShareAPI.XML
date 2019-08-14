@@ -533,6 +533,16 @@
             </summary>
             <returns></returns>
         </member>
+        <member name="T:FreeShareAPI.Controllers.Base.BaseApiController">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:FreeShareAPI.Controllers.Base.BaseApiController.#ctor">
+            <summary>
+            
+            </summary>
+        </member>
         <member name="T:FreeShareAPI.Controllers.HomeController">
             <summary>
             
@@ -615,24 +625,11 @@
             
             </summary>
         </member>
-        <member name="M:FreeShareAPI.CustomAttribute.RoleAuthorize.OnAuthorization(System.Web.Mvc.AuthorizationContext)">
+        <member name="M:FreeShareAPI.CustomAttribute.RoleAuthorize.OnAuthorization(System.Web.Http.Controllers.HttpActionContext)">
             <summary>
             
             </summary>
-            <param name="filterContext"></param>
-        </member>
-        <member name="M:FreeShareAPI.CustomAttribute.RoleAuthorize.ValidateToken(System.String)">
-            <summary>
-            
-            </summary>
-            <param name="authToken"></param>
-            <returns></returns>
-        </member>
-        <member name="M:FreeShareAPI.CustomAttribute.RoleAuthorize.GetValidationParameters">
-            <summary>
-            
-            </summary>
-            <returns></returns>
+            <param name="actionContext"></param>
         </member>
         <member name="T:FreeShareAPI.DataManager.TokenDataManager">
             <summary>
