@@ -481,6 +481,58 @@
             </summary>
             <param name="documentPath">The physical path to XML document.</param>
         </member>
+        <member name="T:FreeShareAPI.Common.Security">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:FreeShareAPI.Common.Security.#ctor">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:FreeShareAPI.Common.Security.HashPassword(System.String)">
+            <summary>
+            
+            </summary>
+            <param name="password"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FreeShareAPI.Common.Security.CheckUser(FreeShareAPI.Models.Dbmodel.UserModel)">
+            <summary>
+            
+            </summary>
+            <param name="userModel"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FreeShareAPI.Common.Security.GenerateToken(System.String,System.Boolean,System.Int32)">
+            <summary>
+            
+            </summary>
+            <param name="username"></param>
+            <param name="admin"></param>
+            <param name="expireMinutes"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FreeShareAPI.Common.Security.ValidateToken(System.String)">
+            <summary>
+            
+            </summary>
+            <param name="authToken"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FreeShareAPI.Common.Security.GetValidationParameters">
+            <summary>
+            
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:FreeShareAPI.Common.Security.CheckRequestHeader">
+            <summary>
+            
+            </summary>
+            <returns></returns>
+        </member>
         <member name="T:FreeShareAPI.Controllers.HomeController">
             <summary>
             
@@ -493,6 +545,11 @@
             <returns></returns>
         </member>
         <member name="T:FreeShareAPI.Controllers.ProductController">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:FreeShareAPI.Controllers.ProductController.#ctor">
             <summary>
             
             </summary>
@@ -531,26 +588,6 @@
             <param name="productModel"></param>
             <returns></returns>
         </member>
-        <member name="M:FreeShareAPI.Controllers.ProductController.UploadImage">
-            <summary>
-            upload image 
-            </summary>
-            <returns></returns>
-        </member>
-        <member name="M:FreeShareAPI.Controllers.ProductController.ImageToByteArray(System.String)">
-            <summary>
-            
-            </summary>
-            <param name="imageData"></param>
-            <returns></returns>
-        </member>
-        <member name="M:FreeShareAPI.Controllers.ProductController.GetImageById(System.Int32)">
-            <summary>
-            get base64String by id
-            </summary>
-            <param name="id"></param>
-            <returns></returns>
-        </member>
         <member name="T:FreeShareAPI.Controllers.TokenController">
             <summary>
             
@@ -561,67 +598,17 @@
             
             </summary>
         </member>
-        <member name="M:FreeShareAPI.Controllers.TokenController.login(System.String,System.String)">
-            <summary>
-            Authenticate user with given credentials
-            </summary>
-            <param name="username"></param>
-            <param name="password"></param>
-            <returns></returns>
-        </member>
-        <member name="M:FreeShareAPI.Controllers.TokenController.CheckUser(System.String,System.String)">
+        <member name="M:FreeShareAPI.Controllers.TokenController.login(FreeShareAPI.Models.Dbmodel.UserModel)">
             <summary>
             
             </summary>
-            <param name="username"></param>
-            <param name="password"></param>
+            <param name="userModel"></param>
             <returns></returns>
         </member>
-        <member name="M:FreeShareAPI.Controllers.TokenController.GenerateToken(System.String,System.Boolean,System.Int32)">
-            <summary>
-            
-            </summary>
-            <param name="username"></param>
-            <param name="admin"></param>
-            <param name="expireMinutes"></param>
-            <returns></returns>
-        </member>
-        <member name="M:FreeShareAPI.Controllers.TokenController.ValidateToken(System.String)">
-            <summary>
-            
-            </summary>
-            <param name="authToken"></param>
-            <returns></returns>
-        </member>
-        <member name="M:FreeShareAPI.Controllers.TokenController.GetValidationParameters">
-            <summary>
-            
-            </summary>
-            <returns></returns>
-        </member>
-        <member name="M:FreeShareAPI.Controllers.TokenController.HashPassword(System.String)">
-            <summary>
-            
-            </summary>
-            <param name="password"></param>
-            <returns></returns>
-        </member>
-        <member name="M:FreeShareAPI.Controllers.TokenController.Register(System.String,System.String)">
+        <member name="M:FreeShareAPI.Controllers.TokenController.Register(FreeShareAPI.Models.Dbmodel.UserModel)">
             <summary>
             Register a new user with given credentials
             </summary>
-        </member>
-        <member name="M:FreeShareAPI.Controllers.TokenController.GetAllProduct">
-            <summary>
-            Get all the product details
-            </summary>
-            <returns></returns>
-        </member>
-        <member name="M:FreeShareAPI.Controllers.TokenController.CheckRequestHeader">
-            <summary>
-            
-            </summary>
-            <returns></returns>
         </member>
         <member name="T:FreeShareAPI.CustomAttribute.RoleAuthorize">
             <summary>
@@ -646,6 +633,17 @@
             
             </summary>
             <returns></returns>
+        </member>
+        <member name="T:FreeShareAPI.DataManager.TokenDataManager">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:FreeShareAPI.DataManager.TokenDataManager.Register(FreeShareAPI.Models.User)">
+            <summary>
+            
+            </summary>
+            <param name="user"></param>
         </member>
     </members>
 </doc>
