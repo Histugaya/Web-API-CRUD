@@ -533,16 +533,6 @@
             </summary>
             <returns></returns>
         </member>
-        <member name="T:FreeShareAPI.Controllers.Base.BaseApiController">
-            <summary>
-            
-            </summary>
-        </member>
-        <member name="M:FreeShareAPI.Controllers.Base.BaseApiController.#ctor">
-            <summary>
-            
-            </summary>
-        </member>
         <member name="T:FreeShareAPI.Controllers.HomeController">
             <summary>
             
@@ -559,43 +549,38 @@
             
             </summary>
         </member>
-        <member name="M:FreeShareAPI.Controllers.ProductController.#ctor">
-            <summary>
-            
-            </summary>
-        </member>
-        <member name="M:FreeShareAPI.Controllers.ProductController.GetAllProduct">
+        <member name="M:FreeShareAPI.Controllers.ProductController.GetAll">
             <summary>
             Get all the product details
             </summary>
             <returns></returns>
         </member>
-        <member name="M:FreeShareAPI.Controllers.ProductController.InsertProduct(FreeShareAPI.Models.Dbmodel.ProductModel)">
+        <member name="M:FreeShareAPI.Controllers.ProductController.Create(FreeShareAPI.Models.Dbmodel.ProductModel)">
             <summary>
             Insert the product details
             </summary>
             <param name="productModel"></param>
             <returns></returns>
         </member>
-        <member name="M:FreeShareAPI.Controllers.ProductController.DeleteProduct(System.Int32)">
+        <member name="M:FreeShareAPI.Controllers.ProductController.Delete(System.Int32)">
             <summary>
             Delete product by Id
             </summary>
             <param name="id"></param>
             <returns></returns>
         </member>
-        <member name="M:FreeShareAPI.Controllers.ProductController.GetProductById(System.Int32)">
-            <summary>
-            Get product details by Id
-            </summary>
-            <param name="id"></param>
-            <returns></returns>
-        </member>
-        <member name="M:FreeShareAPI.Controllers.ProductController.UpdateProduct(FreeShareAPI.Models.Dbmodel.ProductModel)">
+        <member name="M:FreeShareAPI.Controllers.ProductController.Edit(FreeShareAPI.Models.Dbmodel.ProductModel)">
             <summary>
             Update product details by Id
             </summary>
             <param name="productModel"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FreeShareAPI.Controllers.ProductController.GetByID(System.Int32)">
+            <summary>
+            Get product details by Id
+            </summary>
+            <param name="id"></param>
             <returns></returns>
         </member>
         <member name="T:FreeShareAPI.Controllers.TokenController">
@@ -631,6 +616,42 @@
             </summary>
             <param name="actionContext"></param>
         </member>
+        <member name="T:FreeShareAPI.DataManager.ProductDataManager">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:FreeShareAPI.DataManager.ProductDataManager.Add(FreeShareAPI.Models.Dbmodel.ProductModel)">
+            <summary>
+            
+            </summary>
+            <param name="model"></param>
+        </member>
+        <member name="M:FreeShareAPI.DataManager.ProductDataManager.GetAll">
+            <summary>
+            
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:FreeShareAPI.DataManager.ProductDataManager.Delete(System.Int32)">
+            <summary>
+            
+            </summary>
+            <param name="id"></param>
+        </member>
+        <member name="M:FreeShareAPI.DataManager.ProductDataManager.Edit(FreeShareAPI.Models.Dbmodel.ProductModel)">
+            <summary>
+            
+            </summary>
+            <param name="model"></param>
+        </member>
+        <member name="M:FreeShareAPI.DataManager.ProductDataManager.GetByID(System.Int32)">
+            <summary>
+            
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
         <member name="T:FreeShareAPI.DataManager.TokenDataManager">
             <summary>
             
@@ -641,6 +662,33 @@
             
             </summary>
             <param name="user"></param>
+        </member>
+        <member name="T:FreeShareAPI.Interface.IBaseController`1">
+            <summary>
+            
+            </summary>
+            <typeparam name="ViewModel"></typeparam>
+        </member>
+        <member name="T:FreeShareAPI.Interface.IConverter`2">
+            <summary>
+            
+            </summary>
+            <typeparam name="EntityModel"></typeparam>
+            <typeparam name="ViewModel"></typeparam>
+        </member>
+        <member name="M:FreeShareAPI.Interface.IConverter`2.ConvertToEntity(`1)">
+            <summary>
+            
+            </summary>
+            <param name="self"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FreeShareAPI.Interface.IConverter`2.ConvertToModel(`0)">
+            <summary>
+            
+            </summary>
+            <param name="self"></param>
+            <returns></returns>
         </member>
     </members>
 </doc>
