@@ -226,16 +226,22 @@
     <Compile Include="Areas\HelpPage\SampleGeneration\TextSample.cs" />
     <Compile Include="Areas\HelpPage\XmlDocumentationProvider.cs" />
     <Compile Include="Common\Security.cs" />
-    <Compile Include="Controllers\Base\BaseApiController.cs" />
+    <Compile Include="Controllers\Base\BaseController.cs" />
+    <Compile Include="Controllers\Base\BaseDataManager.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ProductController.cs" />
     <Compile Include="Controllers\TokenController.cs" />
+    <Compile Include="Converter\ProductConverter.cs" />
     <Compile Include="Converter\UserConverter.cs" />
     <Compile Include="CustomAttribute\RoleAuthorize.cs" />
+    <Compile Include="DataManager\ProductDataManager.cs" />
     <Compile Include="DataManager\TokenDataManager.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Interface\IBaseController.cs" />
+    <Compile Include="Interface\IConverter.cs" />
+    <Compile Include="Interface\IDataManager.cs" />
     <Compile Include="Models\Dbmodel\ProductModel.cs" />
     <Compile Include="Models\Dbmodel\UserModel.cs" />
     <Compile Include="Models\FreeShareEntities.Context.cs">
