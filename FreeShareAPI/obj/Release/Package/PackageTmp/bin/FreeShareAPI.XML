@@ -481,59 +481,123 @@
             </summary>
             <param name="documentPath">The physical path to XML document.</param>
         </member>
-        <member name="M:FreeShareAPI.Controllers.ProductController.GetAllProduct">
+        <member name="T:FreeShareAPI.Common.Security">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:FreeShareAPI.Common.Security.#ctor">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:FreeShareAPI.Common.Security.HashPassword(System.String)">
+            <summary>
+            
+            </summary>
+            <param name="password"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FreeShareAPI.Common.Security.CheckUser(FreeShareAPI.Models.Dbmodel.UserModel)">
+            <summary>
+            
+            </summary>
+            <param name="userModel"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FreeShareAPI.Common.Security.GenerateToken(System.String,System.Boolean,System.Int32)">
+            <summary>
+            
+            </summary>
+            <param name="username"></param>
+            <param name="admin"></param>
+            <param name="expireMinutes"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FreeShareAPI.Common.Security.ValidateToken(System.String)">
+            <summary>
+            
+            </summary>
+            <param name="authToken"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FreeShareAPI.Common.Security.GetValidationParameters">
+            <summary>
+            
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:FreeShareAPI.Common.Security.CheckRequestHeader">
+            <summary>
+            
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:FreeShareAPI.Controllers.HomeController">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:FreeShareAPI.Controllers.HomeController.Index">
+            <summary>
+            
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:FreeShareAPI.Controllers.ProductController">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:FreeShareAPI.Controllers.ProductController.GetAll">
             <summary>
             Get all the product details
             </summary>
             <returns></returns>
         </member>
-        <member name="M:FreeShareAPI.Controllers.ProductController.InsertProduct(FreeShareAPI.Models.Dbmodel.ProductModel)">
+        <member name="M:FreeShareAPI.Controllers.ProductController.Create(FreeShareAPI.Models.Dbmodel.ProductModel)">
             <summary>
             Insert the product details
             </summary>
             <param name="productModel"></param>
             <returns></returns>
         </member>
-        <member name="M:FreeShareAPI.Controllers.ProductController.DeleteProduct(System.Int32)">
+        <member name="M:FreeShareAPI.Controllers.ProductController.Delete(System.Int32)">
             <summary>
             Delete product by Id
             </summary>
             <param name="id"></param>
             <returns></returns>
         </member>
-        <member name="M:FreeShareAPI.Controllers.ProductController.GetProductById(System.Int32)">
-            <summary>
-            Get product details by Id
-            </summary>
-            <param name="id"></param>
-            <returns></returns>
-        </member>
-        <member name="M:FreeShareAPI.Controllers.ProductController.UpdateProduct(FreeShareAPI.Models.Dbmodel.ProductModel)">
+        <member name="M:FreeShareAPI.Controllers.ProductController.Edit(FreeShareAPI.Models.Dbmodel.ProductModel)">
             <summary>
             Update product details by Id
             </summary>
             <param name="productModel"></param>
             <returns></returns>
         </member>
-        <member name="M:FreeShareAPI.Controllers.ProductController.UploadImage">
+        <member name="M:FreeShareAPI.Controllers.ProductController.GetByID(System.Int32)">
             <summary>
-            upload image 
-            </summary>
-            <returns></returns>
-        </member>
-        <member name="M:FreeShareAPI.Controllers.ProductController.GetImageById(System.Int32)">
-            <summary>
-            get base64String by id
+            Get product details by Id
             </summary>
             <param name="id"></param>
             <returns></returns>
         </member>
+        <member name="T:FreeShareAPI.Controllers.TokenController">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:FreeShareAPI.Controllers.TokenController.#ctor">
+            <summary>
+            
+            </summary>
+        </member>
         <member name="M:FreeShareAPI.Controllers.TokenController.login(FreeShareAPI.Models.Dbmodel.UserModel)">
             <summary>
-            Authenticate user with given credentials
+            
             </summary>
-            <param name="username"></param>
-            <param name="password"></param>
+            <param name="userModel"></param>
             <returns></returns>
         </member>
         <member name="M:FreeShareAPI.Controllers.TokenController.Register(FreeShareAPI.Models.Dbmodel.UserModel)">
@@ -541,10 +605,89 @@
             Register a new user with given credentials
             </summary>
         </member>
-        <member name="M:FreeShareAPI.Controllers.TokenController.GetAllProduct">
+        <member name="T:FreeShareAPI.CustomAttribute.RoleAuthorize">
             <summary>
-            Get all the product details
+            
             </summary>
+        </member>
+        <member name="M:FreeShareAPI.CustomAttribute.RoleAuthorize.OnAuthorization(System.Web.Http.Controllers.HttpActionContext)">
+            <summary>
+            
+            </summary>
+            <param name="actionContext"></param>
+        </member>
+        <member name="T:FreeShareAPI.DataManager.ProductDataManager">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:FreeShareAPI.DataManager.ProductDataManager.Add(FreeShareAPI.Models.Dbmodel.ProductModel)">
+            <summary>
+            
+            </summary>
+            <param name="model"></param>
+        </member>
+        <member name="M:FreeShareAPI.DataManager.ProductDataManager.GetAll">
+            <summary>
+            
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:FreeShareAPI.DataManager.ProductDataManager.Delete(System.Int32)">
+            <summary>
+            
+            </summary>
+            <param name="id"></param>
+        </member>
+        <member name="M:FreeShareAPI.DataManager.ProductDataManager.Edit(FreeShareAPI.Models.Dbmodel.ProductModel)">
+            <summary>
+            
+            </summary>
+            <param name="model"></param>
+        </member>
+        <member name="M:FreeShareAPI.DataManager.ProductDataManager.GetByID(System.Int32)">
+            <summary>
+            
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="T:FreeShareAPI.DataManager.TokenDataManager">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:FreeShareAPI.DataManager.TokenDataManager.Register(FreeShareAPI.Models.User)">
+            <summary>
+            
+            </summary>
+            <param name="user"></param>
+        </member>
+        <member name="T:FreeShareAPI.Interface.IBaseController`1">
+            <summary>
+            
+            </summary>
+            <typeparam name="ViewModel"></typeparam>
+        </member>
+        <member name="T:FreeShareAPI.Interface.IConverter`2">
+            <summary>
+            
+            </summary>
+            <typeparam name="EntityModel"></typeparam>
+            <typeparam name="ViewModel"></typeparam>
+        </member>
+        <member name="M:FreeShareAPI.Interface.IConverter`2.ConvertToEntity(`1)">
+            <summary>
+            
+            </summary>
+            <param name="self"></param>
+            <returns></returns>
+        </member>
+        <member name="M:FreeShareAPI.Interface.IConverter`2.ConvertToModel(`0)">
+            <summary>
+            
+            </summary>
+            <param name="self"></param>
             <returns></returns>
         </member>
     </members>

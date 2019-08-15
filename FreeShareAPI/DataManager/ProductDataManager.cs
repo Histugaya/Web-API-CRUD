@@ -72,10 +72,11 @@ namespace FreeShareAPI.DataManager
         /// 
         /// </summary>
         /// <param name="id"></param>
-        public void Delete(int id)
+        public bool Delete(int id)
         {
             try
             {
+                bool result = false;
                 if (id != 0)
                 {
                     using (FreeShareEntities obj = new FreeShareEntities())
@@ -85,16 +86,17 @@ namespace FreeShareAPI.DataManager
                         {
                             obj.Products.Remove(product);
                             obj.SaveChanges();
+                            result = true;
                         }
 
                     }
                 }
+                return result;
             }
             catch(Exception ex)
             {
                 throw;
             }
-            
         }
 
         /// <summary>

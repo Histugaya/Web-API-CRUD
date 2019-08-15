@@ -15,7 +15,7 @@ namespace FreeShareAPI.Interface
 
         void Edit(ViewModel model);
 
-        void Delete(int id);
+        bool Delete(int id);
 
         List<ViewModel> GetAll();
 

@@ -65,7 +65,6 @@ namespace FreeShareAPI.Controllers
             {
                 return InternalServerError();
             }
-            //return BadRequest();
         }
 
         /// <summary>
@@ -79,15 +78,17 @@ namespace FreeShareAPI.Controllers
         {
             try
             {
-                dataManager.Delete(id);
-                return Ok();
+              bool response=dataManager.Delete(id);
+                if (response)
+                {
+                    return Ok();
+                }
+                return NotFound();
             }
             catch (Exception ex)
             {
                 return InternalServerError();
             }
-            //return BadRequest();
-
         }
 
         /// <summary>
@@ -108,7 +109,6 @@ namespace FreeShareAPI.Controllers
             {
                 return InternalServerError();
             }
-            //return BadRequest();
         }
 
         /// <summary>
@@ -124,13 +124,16 @@ namespace FreeShareAPI.Controllers
             {
                 ProductModel model = new ProductModel();
                 model=dataManager.GetByID(id);
-                return Ok(model);
+                if (model != null)
+                {
+                    return Ok(model);
+                }
+                return NotFound();
             }
             catch (Exception ex)
             {
                 return InternalServerError();
             }
-            //return BadRequest();
         }
 
         //[HttpPost]
