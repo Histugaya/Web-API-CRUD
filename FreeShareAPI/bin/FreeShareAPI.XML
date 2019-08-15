@@ -533,6 +533,18 @@
             </summary>
             <returns></returns>
         </member>
+        <member name="T:FreeShareAPI.Controllers.Base.BaseController`1">
+            <summary>
+            
+            </summary>
+            <typeparam name="DataManager"></typeparam>
+        </member>
+        <member name="T:FreeShareAPI.Controllers.Base.BaseDataManager`1">
+            <summary>
+            
+            </summary>
+            <typeparam name="Converter"></typeparam>
+        </member>
         <member name="T:FreeShareAPI.Controllers.HomeController">
             <summary>
             

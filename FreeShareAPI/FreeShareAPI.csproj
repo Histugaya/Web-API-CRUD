@@ -188,7 +188,6 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Images\" />
-    <Folder Include="Properties\PublishProfiles\" />
     <Folder Include="Views\Token\" />
     <Folder Include="Views\User\" />
   </ItemGroup>
@@ -321,6 +320,7 @@
     <Content Include="Models\FreeShareEntities.edmx.diagram">
       <DependentUpon>FreeShareEntities.edmx</DependentUpon>
     </Content>
+    <None Include="Properties\PublishProfiles\ContactAgent.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
