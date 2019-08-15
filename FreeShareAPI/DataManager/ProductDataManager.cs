@@ -97,7 +97,6 @@ namespace FreeShareAPI.DataManager
             {
                 throw;
             }
-            
         }
 
         /// <summary>
