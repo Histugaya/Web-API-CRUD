@@ -103,23 +103,26 @@ namespace FreeShareAPI.DataManager
         /// 
         /// </summary>
         /// <param name="model"></param>
-        public void Edit(ProductModel model)
+        public bool Edit(ProductModel model)
         {
             try
             {
+                bool result = false;
                 if (model!=null)
                 {
                     using (FreeShareEntities obj = new FreeShareEntities())
                     {
                         Product product = obj.Products.FirstOrDefault(x => x.ProductId == model.ProductId);
-                        if (product != null)
+                        if (product.ProductId>0)
                         {
                             product.ProductName = model.ProductName;
                             product.Deleted = model.Deleted;
                             obj.SaveChanges();
+                            result = true;
                         }
                     }
                 }
+                return result;
             }
             catch(Exception ex)
             {
