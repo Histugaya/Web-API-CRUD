@@ -102,8 +102,11 @@ namespace FreeShareAPI.Controllers
         {
             try
             {
-                dataManager.Edit(productModel);
-                return Ok();
+               bool response=dataManager.Edit(productModel);
+                if (response)
+                    return Ok();
+                else
+                    return NotFound();
             }
             catch (Exception ex)
             {
@@ -124,7 +127,7 @@ namespace FreeShareAPI.Controllers
             {
                 ProductModel model = new ProductModel();
                 model=dataManager.GetByID(id);
-                if (model != null)
+                if (model.ProductId>0)
                 {
                     return Ok(model);
                 }
