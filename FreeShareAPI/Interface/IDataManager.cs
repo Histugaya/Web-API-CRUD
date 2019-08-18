@@ -13,7 +13,7 @@ namespace FreeShareAPI.Interface
 
         ViewModel GetByID(int id);
 
-        void Edit(ViewModel model);
+        bool Edit(ViewModel model);
 
         bool Delete(int id);
 
