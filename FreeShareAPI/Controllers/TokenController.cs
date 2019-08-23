@@ -57,7 +57,7 @@ namespace FreeShareAPI.Controllers
                     string token = security.GenerateToken(userModel.Username, admin);
                     return Ok(token);
                 }
-                return Unauthorized();
+                return Ok(false);
             }
             catch(Exception ex)
             {

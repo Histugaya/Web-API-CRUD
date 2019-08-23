@@ -155,3 +155,4 @@ C:\Users\user\Documents\Visual Studio 2015\Projects\Web-API-CRUD\FreeShareAPI\bi
 C:\Users\user\Documents\Visual Studio 2015\Projects\Web-API-CRUD\FreeShareAPI\bin\Antlr3.Runtime.pdb
 C:\Users\user\Documents\Visual Studio 2015\Projects\Web-API-CRUD\FreeShareAPI\obj\Debug\FreeShareAPI.dll
 C:\Users\user\Documents\Visual Studio 2015\Projects\Web-API-CRUD\FreeShareAPI\obj\Debug\FreeShareAPI.pdb
+C:\Users\user\Documents\Visual Studio 2015\Projects\Web-API-CRUD\FreeShareAPI\obj\Debug\FreeShareAPI.csprojResolveAssemblyReference.cache
