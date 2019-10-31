@@ -81,7 +81,7 @@ namespace FreeShareAPI.DataManager
                 {
                     using (FreeShareEntities obj = new FreeShareEntities())
                     {
-                        Product product = obj.Products.FirstOrDefault(x => x.ProductId == id);
+                        Product product = obj.Products.FirstOrDefault(x => x.Id == id);
                         if (product != null)
                         {
                             obj.Products.Remove(product);
@@ -112,11 +112,11 @@ namespace FreeShareAPI.DataManager
                 {
                     using (FreeShareEntities obj = new FreeShareEntities())
                     {
-                        Product product = obj.Products.FirstOrDefault(x => x.ProductId == model.ProductId);
-                        if (product.ProductId>0)
+                        Product product = obj.Products.FirstOrDefault(x => x.Id == model.ProductId);
+                        if (product.Id>0)
                         {
                             product.ProductName = model.ProductName;
-                            product.Deleted = model.Deleted;
+                            product.Preview = model.Deleted;
                             obj.SaveChanges();
                             result = true;
                         }
@@ -145,7 +145,7 @@ namespace FreeShareAPI.DataManager
                     using (FreeShareEntities obj = new FreeShareEntities())
                     {
                         Product product = new Product();
-                        product = obj.Products.FirstOrDefault(x => x.ProductId == id);
+                        product = obj.Products.FirstOrDefault(x => x.Id == id);
                         model = converter.ConvertToModel(product);
                         return model;
                     }

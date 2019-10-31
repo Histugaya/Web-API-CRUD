@@ -241,31 +241,34 @@
     <Compile Include="Interface\IBaseController.cs" />
     <Compile Include="Interface\IConverter.cs" />
     <Compile Include="Interface\IDataManager.cs" />
+    <Compile Include="Models\Category.cs">
+      <DependentUpon>Model.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\Dbmodel\ProductModel.cs" />
     <Compile Include="Models\Dbmodel\UserModel.cs" />
-    <Compile Include="Models\FreeShareEntities.Context.cs">
+    <Compile Include="Models\Model.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>FreeShareEntities.Context.tt</DependentUpon>
+      <DependentUpon>Model.Context.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\FreeShareEntities.cs">
+    <Compile Include="Models\Model.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>FreeShareEntities.tt</DependentUpon>
+      <DependentUpon>Model.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\FreeShareEntities.Designer.cs">
+    <Compile Include="Models\Model.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>FreeShareEntities.edmx</DependentUpon>
-    </Compile>
-    <Compile Include="Models\ImageDemo.cs">
-      <DependentUpon>FreeShareEntities.tt</DependentUpon>
+      <DependentUpon>Model.edmx</DependentUpon>
     </Compile>
     <Compile Include="Models\Product.cs">
-      <DependentUpon>FreeShareEntities.tt</DependentUpon>
+      <DependentUpon>Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\ProductCarosuel.cs">
+      <DependentUpon>Model.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\User.cs">
-      <DependentUpon>FreeShareEntities.tt</DependentUpon>
+      <DependentUpon>Model.tt</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -277,15 +280,15 @@
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
-    <Content Include="Models\FreeShareEntities.Context.tt">
+    <Content Include="Models\Model.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
-      <DependentUpon>FreeShareEntities.edmx</DependentUpon>
-      <LastGenOutput>FreeShareEntities.Context.cs</LastGenOutput>
+      <DependentUpon>Model.edmx</DependentUpon>
+      <LastGenOutput>Model.Context.cs</LastGenOutput>
     </Content>
-    <Content Include="Models\FreeShareEntities.tt">
+    <Content Include="Models\Model.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
-      <DependentUpon>FreeShareEntities.edmx</DependentUpon>
-      <LastGenOutput>FreeShareEntities.cs</LastGenOutput>
+      <DependentUpon>Model.edmx</DependentUpon>
+      <LastGenOutput>Model.cs</LastGenOutput>
     </Content>
     <Content Include="Scripts\ai.0.22.9-build00167.js" />
     <Content Include="Scripts\ai.0.22.9-build00167.min.js" />
@@ -313,12 +316,12 @@
     <Content Include="ApplicationInsights.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <EntityDeploy Include="Models\FreeShareEntities.edmx">
+    <EntityDeploy Include="Models\Model.edmx">
       <Generator>EntityModelCodeGenerator</Generator>
-      <LastGenOutput>FreeShareEntities.Designer.cs</LastGenOutput>
+      <LastGenOutput>Model.Designer.cs</LastGenOutput>
     </EntityDeploy>
-    <Content Include="Models\FreeShareEntities.edmx.diagram">
-      <DependentUpon>FreeShareEntities.edmx</DependentUpon>
+    <Content Include="Models\Model.edmx.diagram">
+      <DependentUpon>Model.edmx</DependentUpon>
     </Content>
     <None Include="Properties\PublishProfiles\ContactAgent.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
