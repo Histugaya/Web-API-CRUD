@@ -11,6 +11,6 @@ namespace FreeShareAPI.Models.Dbmodel
 
         public string ProductName { get; set; }
 
-        public int Deleted { get; set; }
+        public bool Deleted { get; set; }
     }
 }
