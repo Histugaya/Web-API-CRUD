@@ -15,9 +15,9 @@ namespace FreeShareAPI.Converter
             Product model = new Product();
             if (self != null)
             {
-                model.Id = self.ProductId;
+                model.ProductId = self.ProductId;
                 model.ProductName = self.ProductName;
-                model.Preview = self.Deleted;
+                model.Deleted = self.Deleted;
             }
             return model;
         }
@@ -27,9 +27,9 @@ namespace FreeShareAPI.Converter
             ProductModel model = new ProductModel();
             if (self != null)
             {
-                model.ProductId = self.Id;
+                model.ProductId = self.ProductId;
                 model.ProductName = self.ProductName;
-                model.Deleted = self.Preview;
+                model.Deleted = self.Deleted;
             }
             return model;
         }

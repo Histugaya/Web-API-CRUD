@@ -13,10 +13,10 @@ namespace FreeShareAPI.Models
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;
     
-    public partial class FreeShareEntities : DbContext
+    public partial class AngularEntities : DbContext
     {
-        public FreeShareEntities()
-            : base("name=FreeShareEntities")
+        public AngularEntities()
+            : base("name=AngularEntities")
         {
         }
     
@@ -25,9 +25,7 @@ namespace FreeShareAPI.Models
             throw new UnintentionalCodeFirstException();
         }
     
-        public virtual DbSet<Category> Categories { get; set; }
         public virtual DbSet<Product> Products { get; set; }
-        public virtual DbSet<ProductCarosuel> ProductCarosuels { get; set; }
         public virtual DbSet<User> Users { get; set; }
     }
 }

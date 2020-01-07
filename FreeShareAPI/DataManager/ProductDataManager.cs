@@ -25,7 +25,7 @@ namespace FreeShareAPI.DataManager
             {
                 if (model != null)
                 {
-                    using (FreeShareEntities obj = new FreeShareEntities())
+                    using (AngularEntities obj = new AngularEntities())
                     {
                         Product product = new Product();
                         product=converter.ConvertToEntity(model);
@@ -48,7 +48,7 @@ namespace FreeShareAPI.DataManager
         {
             try
             {
-                using (FreeShareEntities obj = new FreeShareEntities())
+                using (AngularEntities obj = new AngularEntities())
                 {
                     List<Product> product = new List<Product>();
                     List<ProductModel> productModel = new List<ProductModel>();
@@ -79,9 +79,9 @@ namespace FreeShareAPI.DataManager
                 bool result = false;
                 if (id != 0)
                 {
-                    using (FreeShareEntities obj = new FreeShareEntities())
+                    using (AngularEntities obj = new AngularEntities())
                     {
-                        Product product = obj.Products.FirstOrDefault(x => x.Id == id);
+                        Product product = obj.Products.FirstOrDefault(x => x.ProductId == id);
                         if (product != null)
                         {
                             obj.Products.Remove(product);
@@ -110,13 +110,13 @@ namespace FreeShareAPI.DataManager
                 bool result = false;
                 if (model!=null)
                 {
-                    using (FreeShareEntities obj = new FreeShareEntities())
+                    using (AngularEntities obj = new AngularEntities())
                     {
-                        Product product = obj.Products.FirstOrDefault(x => x.Id == model.ProductId);
-                        if (product.Id>0)
+                        Product product = obj.Products.FirstOrDefault(x => x.ProductId == model.ProductId);
+                        if (product.ProductId>0)
                         {
                             product.ProductName = model.ProductName;
-                            product.Preview = model.Deleted;
+                            product.Deleted = model.Deleted;
                             obj.SaveChanges();
                             result = true;
                         }
@@ -142,10 +142,10 @@ namespace FreeShareAPI.DataManager
                 ProductModel model = new ProductModel();
                 if (id != 0)
                 {
-                    using (FreeShareEntities obj = new FreeShareEntities())
+                    using (AngularEntities obj = new AngularEntities())
                     {
                         Product product = new Product();
-                        product = obj.Products.FirstOrDefault(x => x.Id == id);
+                        product = obj.Products.FirstOrDefault(x => x.ProductId == id);
                         model = converter.ConvertToModel(product);
                         return model;
                     }

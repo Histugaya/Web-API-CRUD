@@ -1,5 +1,0 @@
-CREATE TABLE ImageDemo
-( Id INT PRIMARY KEY IDENTITY(1,1) Not Null,
-  Name VARCHAR(100) ,
-  Image VARCHAR(100)
-);

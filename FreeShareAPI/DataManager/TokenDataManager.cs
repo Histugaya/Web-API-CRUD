@@ -18,7 +18,7 @@ namespace FreeShareAPI.DataManager
         /// <param name="user"></param>
         public void Register(User user)
         {
-            using (FreeShareEntities obj = new FreeShareEntities())
+            using (AngularEntities obj = new AngularEntities())
             {
                 obj.Users.Add(user);
                 obj.SaveChanges();
