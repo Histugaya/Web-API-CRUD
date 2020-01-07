@@ -14,12 +14,8 @@ namespace FreeShareAPI.Models
     
     public partial class Product
     {
-        public int Id { get; set; }
+        public int ProductId { get; set; }
         public string ProductName { get; set; }
-        public string ImageBase64 { get; set; }
-        public Nullable<decimal> Cost { get; set; }
-        public string Details { get; set; }
-        public bool Preview { get; set; }
-        public int CategoryId { get; set; }
+        public bool Deleted { get; set; }
     }
 }

@@ -61,7 +61,7 @@ namespace FreeShareAPI.Common
             string decodePassword;
             if (userModel != null)
             {
-                using (FreeShareEntities obj = new FreeShareEntities())
+                using (AngularEntities obj = new AngularEntities())
                 {
                     decodePassword = HashPassword(userModel.Password);
                     return obj.Users.Any(x => x.Username == userModel.Username
