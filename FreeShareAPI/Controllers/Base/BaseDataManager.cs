@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-
-namespace FreeShareAPI.Controllers.Base
+﻿namespace FreeShareAPI.Controllers.Base
 {
     /// <summary>
     /// 
@@ -14,6 +9,9 @@ namespace FreeShareAPI.Controllers.Base
     {
         protected readonly Converter converter;
 
+       /// <summary>
+       /// default constructor
+       /// </summary>
         public BaseDataManager() : base()
         {
             converter = new Converter();

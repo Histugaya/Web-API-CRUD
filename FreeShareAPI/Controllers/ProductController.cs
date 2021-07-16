@@ -1,19 +1,10 @@
-﻿using FreeShareAPI.Common;
-using FreeShareAPI.Controllers.Base;
+﻿using FreeShareAPI.Controllers.Base;
 using FreeShareAPI.CustomAttribute;
 using FreeShareAPI.DataManager;
 using FreeShareAPI.Interface;
-using FreeShareAPI.Models;
 using FreeShareAPI.Models.Dbmodel;
 using System;
 using System.Collections.Generic;
-using System.Data.Entity.Validation;
-using System.Diagnostics;
-using System.Drawing;
-using System.IO;
-using System.Linq;
-using System.Net.Http;
-using System.Web;
 using System.Web.Http;
 
 namespace FreeShareAPI.Controllers

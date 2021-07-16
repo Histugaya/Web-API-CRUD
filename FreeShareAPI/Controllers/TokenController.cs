@@ -1,25 +1,12 @@
-﻿using Microsoft.IdentityModel.Tokens;
-using System;
-using System.Collections.Generic;
-using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
-using System.Net;
-using System.Net.Http;
-using System.Security.Claims;
-using System.Web.Http;
-using System.Configuration;
-using System.Security.Cryptography;
-using System.Text;
-using FreeShareAPI.Models;
-using FreeShareAPI.Models.Dbmodel;
-using System.Data.Entity.Validation;
-using System.Diagnostics;
-using System.Security.Principal;
-using System.Web;
-using FreeShareAPI.CustomAttribute;
+﻿using FreeShareAPI.Common;
 using FreeShareAPI.Converter;
 using FreeShareAPI.DataManager;
-using FreeShareAPI.Common;
+using FreeShareAPI.Models;
+using FreeShareAPI.Models.Dbmodel;
+using System;
+using System.Data.Entity.Validation;
+using System.Diagnostics;
+using System.Web.Http;
 
 namespace FreeShareAPI.Controllers
 {

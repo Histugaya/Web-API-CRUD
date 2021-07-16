@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Net.Http;
-using System.Web.Http;
+﻿using System.Web.Http;
 
 namespace FreeShareAPI.Controllers.Base
 {
@@ -16,6 +11,9 @@ namespace FreeShareAPI.Controllers.Base
     {
         protected readonly DataManager dataManager;
 
+        /// <summary>
+        /// default constructor
+        /// </summary>
         public BaseController() : base()
         {
             dataManager = new DataManager();
