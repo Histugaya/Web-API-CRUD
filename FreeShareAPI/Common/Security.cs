@@ -2,7 +2,6 @@
 using FreeShareAPI.Models.Dbmodel;
 using Microsoft.IdentityModel.Tokens;
 using System;
-using System.Collections.Generic;
 using System.Configuration;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
